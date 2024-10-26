@@ -1,11 +1,11 @@
-import { BeforeUpdate, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { BeforeUpdate, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('access_summaries')
 export class AccessSummary {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({type: 'smallint'})
+  @Column({ type: 'smallint' })
   totalAccess: number;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
@@ -13,6 +13,6 @@ export class AccessSummary {
 
   @BeforeUpdate()
   updateLastAccessAt() {
-    this.lastAccessAt = new Date()
+    this.lastAccessAt = new Date();
   }
 }
