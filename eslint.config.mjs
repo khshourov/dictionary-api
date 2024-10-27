@@ -33,7 +33,7 @@ export default [{
 
         parserOptions: {
             project: "tsconfig.json",
-            tsconfigRootDir: "/Users/shourov/PersonalWorks/dictionary-api",
+            tsconfigRootDir: "./",
         },
     },
 
