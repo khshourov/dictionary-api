@@ -8,6 +8,6 @@ export class DictionaryWord {
   @Column({ unique: true })
   word: string;
 
-  @Column({ type: 'text' })
+  @Column({ type: 'text', name: 'lexical_entry' })
   lexicalEntry: string; // Storing as gzip'd json string
 }
