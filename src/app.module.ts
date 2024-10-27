@@ -4,6 +4,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { DictionaryRecordsModule } from './dictionary-records/dictionary-records.module';
+import { AppController } from './app.controller';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -25,6 +27,8 @@ import { DictionaryRecordsModule } from './dictionary-records/dictionary-records
     }),
     DictionaryRecordsModule,
     AuthModule,
+    JwtModule,
   ],
+  controllers: [AppController],
 })
 export class AppModule {}
