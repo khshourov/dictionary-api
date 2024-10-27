@@ -1,7 +1,7 @@
 {
   "name": "dictionary-api",
   "version": "0.0.1",
-  "description": "",
+  "description": "Provide a REST API to search for lexical entries of a word ",
   "author": "Kamrul H Shourov",
   "private": false,
   "license": "MIT",
