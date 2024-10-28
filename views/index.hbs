@@ -143,7 +143,6 @@
       flex-direction: row;
       align-items: center;
       justify-content: flex-start;
-      padding-left: 2em;
       padding-bottom: .25em;
       gap: .5em;
     }
@@ -434,7 +433,8 @@
         const regionBlockElement = createElement('div', 'region-block');
         let id = 0;
 
-        for (const region in response['dictionaryWord']['entry']['ipaListings']) {
+        const regions = Object.keys(response['dictionaryWord']['entry']['ipaListings']).sort((a, b) => b.localeCompare(a));
+        for (const region of regions) {
           const pronunciationContainer = createElement('div', 'pronunciation-container');
           const flag = region === 'us' ? '🇺🇸' : '🇬🇧';
           pronunciationContainer.appendChild(createElement('span', '', flag));
