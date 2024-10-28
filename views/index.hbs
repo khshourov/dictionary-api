@@ -3,8 +3,495 @@
   <head>
     <meta charset="utf-8" />
     <meta name="jwt-token" content="{{ token }}" />
+    <title>📖 Dictionary</title>
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Overpass:300,400,600,800'>
+    <script src='https://use.fontawesome.com/facf9fa52c.js'></script>
+    <style>
+    /* Reset some default styling */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      background-color: #f5f5f5; /* Background color */
+      line-height: 1.6;
+      font: 16px/1.5em "Overpass", "Open Sans", Helvetica, sans-serif;
+      color: #333;
+      font-weight: 300;
+    }
+    /* Style for body to fill the viewport */
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 1.25em;
+    }
+    body.center {
+      justify-content: center;
+    }
+    #root {
+      width: 100%;
+      padding-bottom: 2em;
+    }
+    /* Link styles */
+    a {
+      color: #3498db;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    .btn {
+      display: inline-block;
+      background: transparent;
+      color: inherit;
+      font: inherit;
+      border: 0;
+      outline: 0;
+      padding: 0;
+      cursor: pointer;
+    }
+    .btn--primary {
+      background: #7f8ff4;
+      color: #fff;
+      box-shadow: 0 0 .625em .125em rgba(0, 0, 0, 0.1);
+      border-radius: .125em;
+      padding: .75em 2.25em;
+    }
+    .btn--primary:hover {
+      background: #6c7ff2;
+    }
+    .btn--primary:active {
+      background: #7f8ff4;
+      box-shadow: inset 0 0 .625em .125em rgba(0, 0, 0, 0.2);
+    }
+    .btn--inside {
+      margin-left: -7em;
+    }
+    .form__field {
+      width: 95%;
+      background: #fff;
+      color: #a3a3a3;
+      font: inherit;
+      box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.1);
+      border: 0;
+      outline: 0;
+      padding: 22px 18px;
+    }
+    .card {
+      box-shadow: 0 .25em .5em 0 rgba(0, 0, 0, 0.2);
+      transition: 0.3s;
+      width: 100%;
+      padding: .5em;
+      margin-top: .25em;
+      /* width: 40%; */
+    }
+    .card:hover {
+      box-shadow: 0 .5em 1em 0 rgba(0, 0, 0, 0.2);
+    }
+    .header-container {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2em;
+    }
+    .word {
+      padding: 0.5em 0;
+      max-width: 60%;
+      word-wrap: anywhere;
+    }
+    .access-info-container {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: flex-left;
+      gap: 1em;
+    }
+    .access-info-container > .access-info {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5em;
+    }
+    .icon {
+      width: 1em;
+      height: 1em;
+    }
+    .access-info > .access-content {
+      margin-top: .35em;
+    }
+    .divider {
+      padding: .5em 0;
+    }
+    .region-block {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .pronunciation-container {
+      padding: .5em;
+    }
+    .pronunciation-block {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: flex-start;
+      padding-left: 2em;
+      padding-bottom: .25em;
+      gap: .5em;
+    }
+    .pronunciation-block:last-child {
+      padding-bottom: 1em;
+    }
+    .ipa {
+      font-weight: 600;
+    }
+    .ipa > sup{
+      margin-left: .125em;
+      font-weight: 200;
+    }
+    .icon {
+      width: 1em;
+      height: 1em;
+    }
+    .accordion > input[type="checkbox"] {
+      position: absolute;
+      left: -100vw;
+    }
+    .accordion .content {
+      overflow-y: hidden;
+      height: 0;
+      transition: height 0.3s ease;
+    }
+    .accordion > input[type="checkbox"]:checked ~ .content {
+      height: auto;
+      overflow: visible;
+    }
+    .accordion label {
+      display: block;
+    }
+    .accordion {
+      margin-bottom: 1em;
+    }
+    .accordion > input[type="checkbox"]:checked ~ .content {
+      padding: 1em;
+      border: 1px solid #e8e8e8;
+      border-top: 0;
+    }
+    .accordion .handle {
+      margin: 0;
+      font-size: 1.125em;
+      line-height: 1.2em;
+    }
+    .accordion label {
+      color: #333;
+      cursor: pointer;
+      font-weight: normal;
+      padding: 1em;
+      background: #e8e8e8;
+    }
+    .accordion label:hover,
+    .accordion label:focus {
+      background: #d8d8d8;
+    }
+    .accordion .handle label:before {
+      font-family: "fontawesome";
+      content: "\f054";
+      display: inline-block;
+      margin-right: .625em;
+      font-size: 0.58em;
+      line-height: 1.556em;
+      vertical-align: middle;
+    }
+    .accordion > input[type="checkbox"]:checked ~ .handle label:before {
+      content: "\f078";
+    }
+    .accordion {
+      width: 100%;
+    }
+    .meaning {
+      font-weight: 600;
+    }
+    ul {
+      list-style: none;
+    }
+    ul li:before {
+      content: "-  ";
+    }
+    .content ul:not(:first-of-type) {
+      margin-top: 1em;
+    }
+    </style>
   </head>
   <body>
-      <div id="root"></div>
+    <div id="root">
+      <input type="email" class="form__field" placeholder="Word" />
+      <button type="button" class="btn btn--primary btn--inside">Search</button>
+
+      <div id="search-result"></div>
+    </div>
+
+    <script>
+      var response = {
+        dictionaryWord: {
+          "source": "cambridge",
+          "name": "hello",
+          "entry": {
+            "ipaListings": {
+              "uk": [
+                {
+                  "category": "noun",
+                  "ipa": "/heˈləʊ/",
+                  "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/ukh/ukhef/ukheft_029.mp3"
+                }
+              ],
+              "us": [
+                {
+                  "category": "noun",
+                  "ipa": "/heˈloʊ/",
+                  "audio": "https://dictionary.cambridge.org/media/english/us_pron/h/hel/hello/hello.mp3"
+                }
+              ]
+            },
+            "meanings": [
+              {
+                "categories": "exclamation, noun",
+                "entries": [
+                  {
+                    "meaning": "used when meeting or greeting someone:",
+                    "examples": [
+                      "Hello, Paul. I haven't seen you for ages.",
+                      "I know her vaguely - we've exchanged hellos a few times.",
+                      "say hello I just thought I'd call by and say hello.",
+                      "a big hello And a big hello (= welcome) to all the parents who've come to see the show."
+                    ]
+                  },
+                  {
+                    "meaning": "something that is said at the beginning of a phone conversation:",
+                    "examples": [
+                      "\"Hello, I'd like some information about flights to the US, please.\""
+                    ]
+                  },
+                  {
+                    "meaning": "something that is said to attract someone's attention:",
+                    "examples": [
+                      "The front door was open so she walked inside and called out, \"Hello! Is there anybody in?\""
+                    ]
+                  },
+                  {
+                    "meaning": "said to someone who has just said or done something stupid, especially something that shows they are not noticing what is happening:",
+                    "examples": [
+                      "She asked me if I'd just arrived and I was like \"Hello, I've been here for an hour.\""
+                    ]
+                  },
+                  {
+                    "meaning": "an expression of surprise:",
+                    "examples": [
+                      "Hello, this is very strange - I know that man."
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        accessSummary: {
+          totalAccess: 20,
+          lastAccessAt: '2024-10-28 00:00:00',
+        }
+      };
+
+      const svgCalender = `
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+          <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+          <path d="M96 32l0 32L48 64C21.5 64 0 85.5 0 112l0 48 448 0 0-48c0-26.5-21.5-48-48-48l-48 0 0-32c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 32L160 64l0-32c0-17.7-14.3-32-32-32S96 14.3 96 32zM448 192L0 192 0 464c0 26.5 21.5 48 48 48l352 0c26.5 0 48-21.5 48-48l0-272z" />
+        </svg>
+      `;
+      const svgTotal = `
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
+          <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+          <path d="M64 0C28.7 0 0 28.7 0 64L0 448c0 35.3 28.7 64 64 64l256 0c35.3 0 64-28.7 64-64l0-384c0-35.3-28.7-64-64-64L64 0zM96 64l192 0c17.7 0 32 14.3 32 32l0 32c0 17.7-14.3 32-32 32L96 160c-17.7 0-32-14.3-32-32l0-32c0-17.7 14.3-32 32-32zm32 160a32 32 0 1 1 -64 0 32 32 0 1 1 64 0zM96 352a32 32 0 1 1 0-64 32 32 0 1 1 0 64zM64 416c0-17.7 14.3-32 32-32l96 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-96 0c-17.7 0-32-14.3-32-32zM192 256a32 32 0 1 1 0-64 32 32 0 1 1 0 64zm32 64a32 32 0 1 1 -64 0 32 32 0 1 1 64 0zm64-64a32 32 0 1 1 0-64 32 32 0 1 1 0 64zm32 64a32 32 0 1 1 -64 0 32 32 0 1 1 64 0zM288 448a32 32 0 1 1 0-64 32 32 0 1 1 0 64z" />
+        </svg>
+      `;
+      const svgAudio = `
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
+          <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+          <path d="M533.6 32.5C598.5 85.2 640 165.8 640 256s-41.5 170.7-106.4 223.5c-10.3 8.4-25.4 6.8-33.8-3.5s-6.8-25.4 3.5-33.8C557.5 398.2 592 331.2 592 256s-34.5-142.2-88.7-186.3c-10.3-8.4-11.8-23.5-3.5-33.8s23.5-11.8 33.8-3.5zM473.1 107c43.2 35.2 70.9 88.9 70.9 149s-27.7 113.8-70.9 149c-10.3 8.4-25.4 6.8-33.8-3.5s-6.8-25.4 3.5-33.8C475.3 341.3 496 301.1 496 256s-20.7-85.3-53.2-111.8c-10.3-8.4-11.8-23.5-3.5-33.8s23.5-11.8 33.8-3.5zm-60.5 74.5C434.1 199.1 448 225.9 448 256s-13.9 56.9-35.4 74.5c-10.3 8.4-25.4 6.8-33.8-3.5s-6.8-25.4 3.5-33.8C393.1 284.4 400 271 400 256s-6.9-28.4-17.7-37.3c-10.3-8.4-11.8-23.5-3.5-33.8s23.5-11.8 33.8-3.5zM301.1 34.8C312.6 40 320 51.4 320 64l0 384c0 12.6-7.4 24-18.9 29.2s-25 3.1-34.4-5.3L131.8 352 64 352c-35.3 0-64-28.7-64-64l0-64c0-35.3 28.7-64 64-64l67.8 0L266.7 40.1c9.4-8.4 22.9-10.4 34.4-5.3z" />
+        </svg>
+      `;
+
+      const resultDock = document.getElementById('search-result');
+      // Clean the dock
+      while (resultDock.firstChild) {
+        resultDock.removeChild(resultDock.firstChild);
+      }
+
+      const cardElement = document.createElement('div');
+      cardElement.className = 'card';
+      resultDock.appendChild(cardElement);
+
+      const headerContainerElement = document.createElement('div');
+      headerContainerElement.className = 'header-container';
+      cardElement.appendChild(headerContainerElement);
+
+      const wordElement = document.createElement('h1');
+      wordElement.className = 'word';
+      wordElement.textContent = response['dictionaryWord']['name'];
+      headerContainerElement.appendChild(wordElement);
+
+      const accessInfoContainerElement = document.createElement('div');
+      accessInfoContainerElement.className = 'access-info-container';
+      headerContainerElement.appendChild(accessInfoContainerElement);
+
+      const accessInfoElement = document.createElement('div');
+      accessInfoElement.className = 'access-info';
+      accessInfoContainerElement.appendChild(accessInfoElement);
+
+      const iconElement = document.createElement('div');
+      iconElement.className = 'icon';
+      iconElement.innerHTML = svgCalender;
+      accessInfoElement.appendChild(iconElement);
+
+      const accessContentElement = document.createElement('span');
+      accessContentElement.className = 'access-content';
+      accessContentElement.textContent = response['accessSummary']['lastAccessAt'];
+      accessInfoElement.appendChild(accessContentElement);
+
+      const iconElement1 = document.createElement('div');
+      iconElement1.className = 'icon';
+      iconElement1.innerHTML = svgTotal;
+      accessInfoElement.appendChild(iconElement1);
+
+      const accessContentElement1 = document.createElement('span');
+      accessContentElement1.className = 'access-content';
+      accessContentElement1.textContent = response['accessSummary']['totalAccess'];
+      accessInfoElement.appendChild(accessContentElement1);
+
+      const dividerElement = document.createElement('div');
+      dividerElement.className = 'divider';
+      dividerElement.appendChild(document.createElement('hr'));
+      cardElement.appendChild(dividerElement);
+
+      const regionBlockElement = document.createElement('div');
+      regionBlockElement.className = 'region-block';
+      cardElement.appendChild(regionBlockElement);
+      for (const region in response['dictionaryWord']['entry']['ipaListings']) {
+        const flag = region === 'us' ? '🇺🇸    ' : '🇬🇧    ';
+        const pronunciationContainerElement = document.createElement('div');
+        pronunciationContainerElement.className = 'pronunciation-container';
+        const regionFlagElement = document.createElement('span');
+        regionFlagElement.textContent = flag;
+        pronunciationContainerElement.appendChild(regionFlagElement);
+
+        let id = 0;
+        for (const ipa of response['dictionaryWord']['entry']['ipaListings'][region]) {
+          const pronunciationBlockElement = document.createElement('div');
+          pronunciationBlockElement.className = 'pronunciation-block';
+
+          const ipaElement = document.createElement('span');
+          ipaElement.className = 'ipa';
+          ipaElement.textContent = ipa['ipa'];
+
+          const supElement = document.createElement('sup');
+          supElement.textContent = `(${ipa["category"]})`;
+          ipaElement.appendChild(supElement);
+
+          const iconAudio = document.createElement('div');
+          iconAudio.className = 'icon';
+          iconAudio.innerHTML = svgAudio;
+
+          const audioSource = document.createElement('source');
+          audioSource.setAttribute('src', ipa['audio']);
+          audioSource.setAttribute('type', 'audio/mpeg');
+          const audio = document.createElement('audio');
+          audio.id = `audio-${id}`;
+          audio.appendChild(audioSource);
+
+          iconAudio.addEventListener('click', () => {
+            audio.play();
+          });
+
+          pronunciationBlockElement.appendChild(ipaElement);
+          pronunciationBlockElement.appendChild(iconAudio);
+          pronunciationBlockElement.appendChild(audio);
+          pronunciationContainerElement.appendChild(pronunciationBlockElement);
+        }
+        regionBlockElement.appendChild(pronunciationContainerElement);
+        id += 1;
+      }
+
+      const sectionElement = document.createElement('section');
+      sectionElement.className = 'accordion';
+
+      const meaningHeaderElement = document.createElement('input');
+      meaningHeaderElement.type = 'checkbox';
+      meaningHeaderElement.name = 'collapse';
+      meaningHeaderElement.id = 'meaning-header';
+      sectionElement.appendChild(meaningHeaderElement);
+
+      const meaningHeaderTextElement = document.createElement('label');
+      meaningHeaderTextElement.htmlFor = 'meaning-header';
+      meaningHeaderTextElement.textContent = 'Meanings';
+
+      const h2Element = document.createElement('h2');
+      h2Element.className = 'handle';
+      h2Element.appendChild(meaningHeaderTextElement);
+      sectionElement.appendChild(h2Element);
+
+      const categoryContentElement = document.createElement('div');
+      categoryContentElement.className = 'content';
+      let id = 0;
+      for (const categoryInfo of response['dictionaryWord']['entry']['meanings']) {
+        const categorySectionElement = document.createElement('section');
+        categorySectionElement.className = 'accordion';
+
+        const categoryHeaderElement = meaningHeaderElement.cloneNode(false);
+        categoryHeaderElement.id = `category-header-${id}`;
+        categorySectionElement.appendChild(categoryHeaderElement);
+
+        const meaningHeaderTextElement = document.createElement('label');
+        meaningHeaderTextElement.htmlFor = `category-header-${id}`;
+        meaningHeaderTextElement.textContent = categoryInfo['categories'];
+
+        const h2Element = document.createElement('h2');
+        h2Element.className = 'handle';
+        h2Element.appendChild(meaningHeaderTextElement);
+        categorySectionElement.appendChild(h2Element);
+
+        const meaningContentElement = document.createElement('div');
+        meaningContentElement.className = 'content';
+
+        for (const categoryMeaningData of categoryInfo['entries']) {
+          const ul = document.createElement('ul');
+
+          const meaning = document.createElement('strong');
+          meaning.className = 'meaning';
+          meaning.textContent = categoryMeaningData['meaning'];
+          ul.appendChild(meaning);
+
+          for (const example of categoryMeaningData['examples']) {
+            const li = document.createElement('li');
+            li.textContent = example;
+            ul.appendChild(li);
+          }
+
+          meaningContentElement.appendChild(ul);
+        }
+
+        categorySectionElement.appendChild(meaningContentElement);
+        categoryContentElement.appendChild(categorySectionElement);
+        id += 1;
+      }
+      sectionElement.appendChild(categoryContentElement);
+      cardElement.appendChild(sectionElement);
+    </script>
   </body>
 </html>
