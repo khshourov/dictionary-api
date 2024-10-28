@@ -328,170 +328,222 @@
         </svg>
       `;
 
-      const resultDock = document.getElementById('search-result');
-      // Clean the dock
-      while (resultDock.firstChild) {
-        resultDock.removeChild(resultDock.firstChild);
-      }
-
-      const cardElement = document.createElement('div');
-      cardElement.className = 'card';
-      resultDock.appendChild(cardElement);
-
-      const headerContainerElement = document.createElement('div');
-      headerContainerElement.className = 'header-container';
-      cardElement.appendChild(headerContainerElement);
-
-      const wordElement = document.createElement('h1');
-      wordElement.className = 'word';
-      wordElement.textContent = response['dictionaryWord']['name'];
-      headerContainerElement.appendChild(wordElement);
-
-      const accessInfoContainerElement = document.createElement('div');
-      accessInfoContainerElement.className = 'access-info-container';
-      headerContainerElement.appendChild(accessInfoContainerElement);
-
-      const accessInfoElement = document.createElement('div');
-      accessInfoElement.className = 'access-info';
-      accessInfoContainerElement.appendChild(accessInfoElement);
-
-      const iconElement = document.createElement('div');
-      iconElement.className = 'icon';
-      iconElement.innerHTML = svgCalender;
-      accessInfoElement.appendChild(iconElement);
-
-      const accessContentElement = document.createElement('span');
-      accessContentElement.className = 'access-content';
-      accessContentElement.textContent = response['accessSummary']['lastAccessAt'];
-      accessInfoElement.appendChild(accessContentElement);
-
-      const iconElement1 = document.createElement('div');
-      iconElement1.className = 'icon';
-      iconElement1.innerHTML = svgTotal;
-      accessInfoElement.appendChild(iconElement1);
-
-      const accessContentElement1 = document.createElement('span');
-      accessContentElement1.className = 'access-content';
-      accessContentElement1.textContent = response['accessSummary']['totalAccess'];
-      accessInfoElement.appendChild(accessContentElement1);
-
-      const dividerElement = document.createElement('div');
-      dividerElement.className = 'divider';
-      dividerElement.appendChild(document.createElement('hr'));
-      cardElement.appendChild(dividerElement);
-
-      const regionBlockElement = document.createElement('div');
-      regionBlockElement.className = 'region-block';
-      cardElement.appendChild(regionBlockElement);
-      for (const region in response['dictionaryWord']['entry']['ipaListings']) {
-        const flag = region === 'us' ? '🇺🇸    ' : '🇬🇧    ';
-        const pronunciationContainerElement = document.createElement('div');
-        pronunciationContainerElement.className = 'pronunciation-container';
-        const regionFlagElement = document.createElement('span');
-        regionFlagElement.textContent = flag;
-        pronunciationContainerElement.appendChild(regionFlagElement);
-
-        let id = 0;
-        for (const ipa of response['dictionaryWord']['entry']['ipaListings'][region]) {
-          const pronunciationBlockElement = document.createElement('div');
-          pronunciationBlockElement.className = 'pronunciation-block';
-
-          const ipaElement = document.createElement('span');
-          ipaElement.className = 'ipa';
-          ipaElement.textContent = ipa['ipa'];
-
-          const supElement = document.createElement('sup');
-          supElement.textContent = `(${ipa["category"]})`;
-          ipaElement.appendChild(supElement);
-
-          const iconAudio = document.createElement('div');
-          iconAudio.className = 'icon';
-          iconAudio.innerHTML = svgAudio;
-
-          const audioSource = document.createElement('source');
-          audioSource.setAttribute('src', ipa['audio']);
-          audioSource.setAttribute('type', 'audio/mpeg');
-          const audio = document.createElement('audio');
-          audio.id = `audio-${id}`;
-          audio.appendChild(audioSource);
-
-          iconAudio.addEventListener('click', () => {
-            audio.play();
-          });
-
-          pronunciationBlockElement.appendChild(ipaElement);
-          pronunciationBlockElement.appendChild(iconAudio);
-          pronunciationBlockElement.appendChild(audio);
-          pronunciationContainerElement.appendChild(pronunciationBlockElement);
+      // Helper to remove all children from an element
+      function clearElement(element) {
+        while (element.firstChild) {
+          element.removeChild(element.firstChild);
         }
-        regionBlockElement.appendChild(pronunciationContainerElement);
-        id += 1;
       }
 
-      const sectionElement = document.createElement('section');
-      sectionElement.className = 'accordion';
+      // Function to create a generic element with specified properties
+      function createElement(tag, className = '', content = '', attributes = {}) {
+        const element = document.createElement(tag);
+        if (className) element.className = className;
+        if (content) element.textContent = content;
 
-      const meaningHeaderElement = document.createElement('input');
-      meaningHeaderElement.type = 'checkbox';
-      meaningHeaderElement.name = 'collapse';
-      meaningHeaderElement.id = 'meaning-header';
-      sectionElement.appendChild(meaningHeaderElement);
+        // Set additional attributes
+        for (const [key, value] of Object.entries(attributes)) {
+          element.setAttribute(key, value);
+        }
 
-      const meaningHeaderTextElement = document.createElement('label');
-      meaningHeaderTextElement.htmlFor = 'meaning-header';
-      meaningHeaderTextElement.textContent = 'Meanings';
+        return element;
+      }
 
-      const h2Element = document.createElement('h2');
-      h2Element.className = 'handle';
-      h2Element.appendChild(meaningHeaderTextElement);
-      sectionElement.appendChild(h2Element);
+      // Function to create the card layout
+      function createCard(response) {
+        const cardElement = createElement('div', 'card');
 
-      const categoryContentElement = document.createElement('div');
-      categoryContentElement.className = 'content';
-      let id = 0;
-      for (const categoryInfo of response['dictionaryWord']['entry']['meanings']) {
-        const categorySectionElement = document.createElement('section');
-        categorySectionElement.className = 'accordion';
+        // Header Container
+        const headerContainerElement = createHeaderContainer(response);
+        cardElement.appendChild(headerContainerElement);
 
-        const categoryHeaderElement = meaningHeaderElement.cloneNode(false);
-        categoryHeaderElement.id = `category-header-${id}`;
-        categorySectionElement.appendChild(categoryHeaderElement);
+        // Divider
+        const dividerElement = createDivider();
+        cardElement.appendChild(dividerElement);
 
-        const meaningHeaderTextElement = document.createElement('label');
-        meaningHeaderTextElement.htmlFor = `category-header-${id}`;
-        meaningHeaderTextElement.textContent = categoryInfo['categories'];
+        // Pronunciation by Region
+        const regionBlockElement = createRegionBlock(response);
+        cardElement.appendChild(regionBlockElement);
 
-        const h2Element = document.createElement('h2');
-        h2Element.className = 'handle';
-        h2Element.appendChild(meaningHeaderTextElement);
-        categorySectionElement.appendChild(h2Element);
+        // Meanings Section
+        const meaningSectionElement = createMeaningSection(response);
+        cardElement.appendChild(meaningSectionElement);
 
-        const meaningContentElement = document.createElement('div');
-        meaningContentElement.className = 'content';
+        return cardElement;
+      }
 
-        for (const categoryMeaningData of categoryInfo['entries']) {
-          const ul = document.createElement('ul');
+      // Header container with word and access info
+      function createHeaderContainer(response) {
+        const headerContainerElement = createElement('div', 'header-container');
 
-          const meaning = document.createElement('strong');
-          meaning.className = 'meaning';
-          meaning.textContent = categoryMeaningData['meaning'];
-          ul.appendChild(meaning);
+        const wordElement = createElement('h1', 'word', response['dictionaryWord']['name']);
+        headerContainerElement.appendChild(wordElement);
 
-          for (const example of categoryMeaningData['examples']) {
-            const li = document.createElement('li');
-            li.textContent = example;
-            ul.appendChild(li);
+        const accessInfoContainerElement = createAccessInfoContainer(response);
+        headerContainerElement.appendChild(accessInfoContainerElement);
+
+        return headerContainerElement;
+      }
+
+      function createAccessInfoContainer(response) {
+        const accessInfoContainer = createElement('div', 'access-info-container');
+        const accessInfoElement = createElement('div', 'access-info');
+
+        const lastAccessIcon = createIcon(svgCalender);
+        const lastAccessContent = createElement('span', 'access-content', response['accessSummary']['lastAccessAt']);
+
+        const totalAccessIcon = createIcon(svgTotal);
+        const totalAccessContent = createElement('span', 'access-content', response['accessSummary']['totalAccess']);
+
+        accessInfoElement.appendChild(lastAccessIcon);
+        accessInfoElement.appendChild(lastAccessContent);
+        accessInfoElement.appendChild(totalAccessIcon);
+        accessInfoElement.appendChild(totalAccessContent);
+        accessInfoContainer.appendChild(accessInfoElement);
+
+        return accessInfoContainer;
+      }
+
+      // Creates divider
+      function createDivider() {
+        const dividerElement = createElement('div', 'divider');
+        dividerElement.appendChild(createElement('hr'));
+        return dividerElement;
+      }
+
+      // Pronunciation section with region-specific flags and audio
+      function createRegionBlock(response) {
+        const regionBlockElement = createElement('div', 'region-block');
+        let id = 0;
+
+        for (const region in response['dictionaryWord']['entry']['ipaListings']) {
+          const pronunciationContainer = createElement('div', 'pronunciation-container');
+          const flag = region === 'us' ? '🇺🇸' : '🇬🇧';
+          pronunciationContainer.appendChild(createElement('span', '', flag));
+
+          for (const ipa of response['dictionaryWord']['entry']['ipaListings'][region]) {
+            const pronunciationBlock = createPronunciationBlock(ipa, id);
+            pronunciationContainer.appendChild(pronunciationBlock);
+            id += 1;
           }
 
-          meaningContentElement.appendChild(ul);
+          regionBlockElement.appendChild(pronunciationContainer);
         }
 
-        categorySectionElement.appendChild(meaningContentElement);
-        categoryContentElement.appendChild(categorySectionElement);
-        id += 1;
+        return regionBlockElement;
       }
-      sectionElement.appendChild(categoryContentElement);
-      cardElement.appendChild(sectionElement);
+
+      // Pronunciation block with IPA and audio
+      function createPronunciationBlock(ipa, id) {
+        const pronunciationBlock = createElement('div', 'pronunciation-block');
+        const ipaElement = createElement('span', 'ipa', ipa['ipa']);
+
+        const category = createElement('sup', '', `(${ipa["category"]})`);
+        ipaElement.appendChild(category);
+
+        const iconAudio = createIcon(svgAudio);
+        const audioElement = createAudioElement(ipa['audio'], id);
+
+        iconAudio.addEventListener('click', () => audioElement.play());
+
+        pronunciationBlock.appendChild(ipaElement);
+        pronunciationBlock.appendChild(iconAudio);
+        pronunciationBlock.appendChild(audioElement);
+
+        return pronunciationBlock;
+      }
+
+      // Create audio element
+      function createAudioElement(src, id) {
+        const audio = createElement('audio');
+        audio.id = `audio-${id}`;
+        const audioSource = createElement('source');
+        audioSource.setAttribute('src', src);
+        audioSource.setAttribute('type', 'audio/mpeg');
+        audio.appendChild(audioSource);
+        return audio;
+      }
+
+      // Icon creation helper
+      function createIcon(svgContent) {
+        const iconElement = createElement('div', 'icon');
+        iconElement.innerHTML = svgContent;
+        return iconElement;
+      }
+
+      // Meaning section with collapsible categories and examples
+      function createMeaningSection(response) {
+        const sectionElement = createElement('section', 'accordion');
+
+        const meaningHeaderElement = createElement('input', '', '', { type: 'checkbox', name: 'collapse', id: 'meaning-header' });
+        const meaningHeaderTextElement = createElement('label', '', 'Meanings', { for: 'meaning-header' });
+
+        const h2Element = createElement('h2', 'handle');
+        h2Element.appendChild(meaningHeaderTextElement);
+
+        sectionElement.appendChild(meaningHeaderElement);
+        sectionElement.appendChild(h2Element);
+
+        const contentElement = createElement('div', 'content');
+        let id = 0;
+
+        for (const categoryInfo of response['dictionaryWord']['entry']['meanings']) {
+          const categorySectionElement = createCategorySection(categoryInfo, id);
+          contentElement.appendChild(categorySectionElement);
+          id += 1;
+        }
+
+        sectionElement.appendChild(contentElement);
+        return sectionElement;
+      }
+
+      // Collapsible category section
+      function createCategorySection(categoryInfo, id) {
+        const categorySectionElement = createElement('section', 'accordion');
+        const headerCheckbox = createElement('input', '', '', { type: 'checkbox', name: 'collapse', id: `category-header-${id}` });
+        const headerLabel = createElement('label', '', categoryInfo['categories'], { for: `category-header-${id}` });
+
+        const header = createElement('h2', 'handle');
+        header.appendChild(headerLabel);
+
+        categorySectionElement.appendChild(headerCheckbox);
+        categorySectionElement.appendChild(header);
+
+        const meaningContent = createElement('div', 'content');
+
+        for (const meaningData of categoryInfo['entries']) {
+          const meaningList = createMeaningList(meaningData);
+          meaningContent.appendChild(meaningList);
+        }
+
+        categorySectionElement.appendChild(meaningContent);
+        return categorySectionElement;
+      }
+
+      // Meaning list with examples
+      function createMeaningList(meaningData) {
+        const ul = createElement('ul');
+        const meaning = createElement('strong', 'meaning', meaningData['meaning']);
+        ul.appendChild(meaning);
+
+        for (const example of meaningData['examples']) {
+          const li = createElement('li', '', example);
+          ul.appendChild(li);
+        }
+
+        return ul;
+      }
+
+      // Main function to clear and render the entire card
+      function renderCard(response) {
+        const resultDock = document.getElementById('search-result');
+        clearElement(resultDock);
+
+        const cardElement = createCard(response);
+        resultDock.appendChild(cardElement);
+      }
+
+      renderCard(response);
     </script>
   </body>
 </html>
