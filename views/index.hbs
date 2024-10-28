@@ -229,86 +229,102 @@
     .content ul:not(:first-of-type) {
       margin-top: 1em;
     }
+    #search-result {
+      display: flex;
+      justify-content: center;
+    }
+    .error-message {
+      margin-top: 1em;
+      background-color: #fce4e4;
+      border: 1px solid #fcc2c3;
+      float: left;
+      padding: 20px 30px;
+    }
+    .error-text {
+      color: #cc0033;
+      font-family: Helvetica, Arial, sans-serif;
+      font-size: 2em;
+      font-weight: bold;
+      text-shadow: 1px 1px rgba(250,250,250,.3);
+    }
     </style>
   </head>
   <body>
     <div id="root">
-      <input type="email" class="form__field" placeholder="Word" />
-      <button type="button" class="btn btn--primary btn--inside">Search</button>
+      <input type="email" id="search-word" class="form__field" placeholder="Word" />
+      <button type="button" id="search-word-btn" class="btn btn--primary btn--inside">Search</button>
 
       <div id="search-result"></div>
     </div>
 
     <script>
-      var response = {
-        dictionaryWord: {
-          "source": "cambridge",
-          "name": "hello",
-          "entry": {
-            "ipaListings": {
-              "uk": [
-                {
-                  "category": "noun",
-                  "ipa": "/heˈləʊ/",
-                  "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/ukh/ukhef/ukheft_029.mp3"
-                }
-              ],
-              "us": [
-                {
-                  "category": "noun",
-                  "ipa": "/heˈloʊ/",
-                  "audio": "https://dictionary.cambridge.org/media/english/us_pron/h/hel/hello/hello.mp3"
-                }
-              ]
-            },
-            "meanings": [
-              {
-                "categories": "exclamation, noun",
-                "entries": [
-                  {
-                    "meaning": "used when meeting or greeting someone:",
-                    "examples": [
-                      "Hello, Paul. I haven't seen you for ages.",
-                      "I know her vaguely - we've exchanged hellos a few times.",
-                      "say hello I just thought I'd call by and say hello.",
-                      "a big hello And a big hello (= welcome) to all the parents who've come to see the show."
-                    ]
-                  },
-                  {
-                    "meaning": "something that is said at the beginning of a phone conversation:",
-                    "examples": [
-                      "\"Hello, I'd like some information about flights to the US, please.\""
-                    ]
-                  },
-                  {
-                    "meaning": "something that is said to attract someone's attention:",
-                    "examples": [
-                      "The front door was open so she walked inside and called out, \"Hello! Is there anybody in?\""
-                    ]
-                  },
-                  {
-                    "meaning": "said to someone who has just said or done something stupid, especially something that shows they are not noticing what is happening:",
-                    "examples": [
-                      "She asked me if I'd just arrived and I was like \"Hello, I've been here for an hour.\""
-                    ]
-                  },
-                  {
-                    "meaning": "an expression of surprise:",
-                    "examples": [
-                      "Hello, this is very strange - I know that man."
-                    ]
-                  }
-                ]
-              }
-            ]
-          }
-        },
-        accessSummary: {
-          totalAccess: 20,
-          lastAccessAt: '2024-10-28 00:00:00',
-        }
-      };
+      async function decodeBase64Gzip(base64String) {
+        const binaryString = atob(base64String);
 
+        const binaryData = new Uint8Array(binaryString.length);
+        for (let i = 0; i < binaryString.length; i++) {
+          binaryData[i] = binaryString.charCodeAt(i);
+        }
+
+        if ('DecompressionStream' in window) {
+          const stream = new ReadableStream({
+            start(controller) {
+              controller.enqueue(binaryData);
+              controller.close();
+            }
+          });
+
+          const decompressionStream = new DecompressionStream('gzip');
+          const decompressedStream = stream.pipeThrough(decompressionStream);
+          const decompressedResponse = new Response(decompressedStream);
+          const decompressedText = await decompressedResponse.text();
+          return decompressedText;
+        } else {
+          throw new Error("DecompressionStream is not supported in this browser.");
+        }
+      }
+
+      window.onload = () => {
+        const token = document.querySelector('meta[name="jwt-token"]').getAttribute('content');
+        localStorage.setItem('token', token);
+
+        document.querySelector('body').classList.add('center');
+
+        document.getElementById('search-word-btn').addEventListener('click', () => {
+          const searchWord = document.getElementById('search-word').value.trim();
+          if (searchWord.length !== 0) {
+            clearElement(document.getElementById('search-result'));
+
+            fetch(`http://localhost:3000/dictionary/${searchWord}`, {
+              method: 'GET',
+              headers: {
+                'Authorization': `Bearer ${token}`,
+              }
+            })
+              .then(async (response) => {
+                if (!response.ok) {
+                  if (response.status === 404) {
+                    renderError(`${searchWord} not found`);
+                  } else {
+                    renderError('Something went wrong. Please try again');
+                  }
+                  return;
+                }
+
+                document.querySelector('body').classList.remove('center');
+
+                const data = await response.json();
+                data.dictionaryWord = JSON.parse(await decodeBase64Gzip(data.dictionaryWord.lexicalEntry));
+                renderCard(data);
+              })
+              .catch((err) => {
+                renderError('Something went wrong. Please try again');
+              });
+          }
+        });
+      };
+    </script>
+    <script>
       const svgCalender = `
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
           <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
@@ -379,8 +395,10 @@
         const wordElement = createElement('h1', 'word', response['dictionaryWord']['name']);
         headerContainerElement.appendChild(wordElement);
 
-        const accessInfoContainerElement = createAccessInfoContainer(response);
-        headerContainerElement.appendChild(accessInfoContainerElement);
+        if (response['accessSummary']) {
+          const accessInfoContainerElement = createAccessInfoContainer(response);
+          headerContainerElement.appendChild(accessInfoContainerElement);
+        }
 
         return headerContainerElement;
       }
@@ -389,8 +407,9 @@
         const accessInfoContainer = createElement('div', 'access-info-container');
         const accessInfoElement = createElement('div', 'access-info');
 
+        const lastAccessAt = (response['accessSummary']['lastAccessAt'].split('.')[0]).replace('T', ' ');
         const lastAccessIcon = createIcon(svgCalender);
-        const lastAccessContent = createElement('span', 'access-content', response['accessSummary']['lastAccessAt']);
+        const lastAccessContent = createElement('span', 'access-content', lastAccessAt);
 
         const totalAccessIcon = createIcon(svgTotal);
         const totalAccessContent = createElement('span', 'access-content', response['accessSummary']['totalAccess']);
@@ -438,8 +457,10 @@
         const pronunciationBlock = createElement('div', 'pronunciation-block');
         const ipaElement = createElement('span', 'ipa', ipa['ipa']);
 
-        const category = createElement('sup', '', `(${ipa["category"]})`);
-        ipaElement.appendChild(category);
+        if (ipa['category']) {
+          const category = createElement('sup', '', `(${ipa["category"]})`);
+          ipaElement.appendChild(category);
+        }
 
         const iconAudio = createIcon(svgAudio);
         const audioElement = createAudioElement(ipa['audio'], id);
@@ -543,7 +564,12 @@
         resultDock.appendChild(cardElement);
       }
 
-      renderCard(response);
+      function renderError(message) {
+        const errorBlockElement = createElement('div', 'error-message')
+        errorBlockElement.appendChild(createElement('span', 'error-text', message));
+        const resultDock = document.getElementById('search-result');
+        resultDock.appendChild(errorBlockElement);
+      }
     </script>
   </body>
 </html>
