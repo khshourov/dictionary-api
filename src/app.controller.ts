@@ -1,10 +1,14 @@
 import { Get, Controller, Query, Res } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { Response } from 'express';
 
 @Controller()
 export class AppController {
-  constructor(private readonly jwtService: JwtService) {}
+  constructor(
+    private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
+  ) {}
 
   @Get()
   async root(@Query('token') token: string, @Res() res: Response) {
@@ -17,6 +21,9 @@ export class AppController {
     if (!verifiedToken) {
       return res.redirect('/auth/google');
     }
-    return res.render('index', { token });
+    return res.render('index', {
+      token,
+      domain: this.configService.get<string>('APP_BASE_URL'),
+    });
   }
 }
