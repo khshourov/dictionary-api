@@ -295,7 +295,7 @@
           if (searchWord.length !== 0) {
             clearElement(document.getElementById('search-result'));
 
-            fetch(`http://localhost:3000/dictionary/${searchWord}`, {
+            fetch(`{{domain}}/dictionary/${searchWord}`, {
               method: 'GET',
               headers: {
                 'Authorization': `Bearer ${token}`,
