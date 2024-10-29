@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './App.css';
-import SearchBox from './components/SearchBox/SearchBox';
+import SearchBox from './components/search-box/SearchBox';
 import { DictionaryEntry } from './types';
 
 function App() {
