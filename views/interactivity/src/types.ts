@@ -36,9 +36,3 @@ export type DictionaryAPIResponse = {
   accessSummary: AccessSummary | null;
 };
 
-export type ContextType = {
-  response: DictionaryAPIResponse | null;
-  setResponse: (response: DictionaryAPIResponse) => void;
-  errorMessage: string | null;
-  setErrorMessage: (errorMessage: string) => void;
-};
