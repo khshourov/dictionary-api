@@ -30,9 +30,9 @@ jobs:
     - name: Run CI
       run: yarn run ci
 
-    - name: Check Views
-      run: cd views/interactivity
-    - name: Install dependencies
+    - name: (ui) Install dependencies
       run: yarn install
-    - name: Run CI
+      working-directory: views/interactivity
+    - name: (ui) Run CI
       run: yarn run ci
+      working-directory: views/interactivity
