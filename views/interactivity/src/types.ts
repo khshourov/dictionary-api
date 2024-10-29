@@ -31,8 +31,7 @@ export type AccessSummary = {
   lastAccessAt: string;
 };
 
-export type DictionaryAPIResponse = {
+export type DictionaryEntry = {
   dictionaryWord: DictionaryWord;
   accessSummary: AccessSummary | null;
 };
-

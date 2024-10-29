@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { DictionaryAPIResponse } from '../../types';
+import { DictionaryEntry } from '../../types';
 import './SearchBox.css';
 
 type Props = {
-  onResponse: (response: DictionaryAPIResponse) => void;
+  onResponse: (response: DictionaryEntry) => void;
   onError: (errorMessage: string) => void;
 };
 
@@ -36,7 +36,7 @@ export default function SearchBox({ onResponse, onError }: Props) {
             return onError('Something went wrong. Please try again.');
           }
         }
-        onResponse((await response.json()) as unknown as DictionaryAPIResponse);
+        onResponse((await response.json()) as unknown as DictionaryEntry);
       })
       .catch(() => {
         onError('Something went wrong. Please try again.');
