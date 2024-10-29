@@ -27,6 +27,12 @@ jobs:
 
     - name: Install dependencies
       run: yarn install
+    - name: Run CI
+      run: yarn run ci
 
+    - name: Check Views
+      run: cd views/interactivity
+    - name: Install dependencies
+      run: yarn install
     - name: Run CI
       run: yarn run ci
