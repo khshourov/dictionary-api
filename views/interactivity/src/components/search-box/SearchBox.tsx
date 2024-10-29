@@ -1,46 +1,36 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { DictionaryEntry } from '../../types';
+import { DictionaryApi } from '../api/dictionary';
 import './SearchBox.css';
+import { NotFoundError } from '../../error/not-found';
 
 type Props = {
-  onResponse: (response: DictionaryEntry) => void;
+  dictionaryApi: DictionaryApi;
+  onSuccess: (response: DictionaryEntry) => void;
   onError: (errorMessage: string) => void;
 };
 
-export default function SearchBox({ onResponse, onError }: Props) {
-  const [token, setToken] = useState<string | null>(null);
+export default function SearchBox({
+  dictionaryApi,
+  onSuccess,
+  onError,
+}: Props) {
   const [searchWord, setSearchWord] = useState<string>('');
-
-  useEffect(() => {
-    const token = document.querySelector('meta[name="jwt-token"]');
-    if (token) {
-      setToken(token.getAttribute('content'));
-    }
-  }, []);
 
   function handleInput(input: string) {
     setSearchWord(input);
   }
 
-  function handleSearch() {
-    fetch(`${process.env.APP_BASE_URL}/dictionary/${searchWord}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then(async (response) => {
-        if (!response.ok) {
-          if (response.status === 404) {
-            return onError(`${searchWord} not found`);
-          } else {
-            return onError('Something went wrong. Please try again.');
-          }
-        }
-        onResponse((await response.json()) as unknown as DictionaryEntry);
-      })
-      .catch(() => {
+  async function handleSearch() {
+    try {
+      onSuccess(await dictionaryApi.fetch(searchWord));
+    } catch (err) {
+      if (err instanceof NotFoundError) {
+        onError(`${searchWord} not found`);
+      } else {
         onError('Something went wrong. Please try again.');
-      });
+      }
+    }
   }
 
   return (

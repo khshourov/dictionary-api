@@ -3,6 +3,21 @@ import { render, screen, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import userEvent from '@testing-library/user-event';
 import SearchBox from './SearchBox';
+import { DictionaryApi } from '../api/dictionary';
+
+const searchWord = 'innocuous';
+const validResponse = {
+  dictionaryWord: {
+    word: searchWord,
+    lexicalEntry:
+      'H4sIAAAAAAAEE6WQz0rEMBDGXyXMSWFpFrxIwYP/EEEvepRFsu3YzrbJlPwRl6V3j+rNV/BNFl/KSXfBowcJCZMvXya/fBsInHyFUML56e3Z3fXF1SXMwBmbJXKOq8QpiIQu+jWUG6DB3FCI5JqQt6mD8mEDlYnYcHaAmMUjhd5+fb+67UdXrFKx/QxaTkyqieWsjXEIpdY1VZHYGb8uKmOXnuoGC/aNtliT0eiankKrU/c4eHY6SUV5OqnzSm4+Py7scATjYgZC+gfM+/db0f0fJ+xwSGeQKabdmsPa04wzsGgEMOf0mxChbMHUK5SPP+M+2UkV0/6GOCq2Q48R+7Vqjbc9hqAOTlRlUpCWyvEkH5a5wYvJ3vwM3LNFZVNoPbMNqmfu1MSXydQyRWU8iqKeTBXVwBTYZWZYjHmMPxC0hzQRAgAA',
+  },
+  accessSummary: {
+    totalAccess: 1,
+    lastAccessAt: '2024-10-28T16:20:42.846Z',
+  },
+};
+const dictionaryApi = new DictionaryApi({ token: 'bearer-token' });
 
 beforeAll(() => {
   process.env.APP_BASE_URL = '';
@@ -23,7 +38,13 @@ afterAll(() => {
 });
 
 test('search box should contain a text box and a button', async () => {
-  render(<SearchBox onResponse={jest.fn()} onError={jest.fn()} />);
+  render(
+    <SearchBox
+      dictionaryApi={dictionaryApi}
+      onSuccess={jest.fn()}
+      onError={jest.fn()}
+    />,
+  );
 
   const wordInputBox = screen.getByPlaceholderText('Word');
   const button = screen.getByRole('button', { name: 'Search' });
@@ -38,20 +59,25 @@ test('on button click, successful api response should returned', async () => {
       Promise.resolve({
         ok: true,
         status: 200,
-        json: () => Promise.resolve({}),
+        json: () => Promise.resolve(validResponse),
       }) as Promise<Response>,
   );
-  const onResponse = jest.fn();
+  const onSuccess = jest.fn();
   const onError = jest.fn();
-  const searchWord = 'hello';
 
-  render(<SearchBox onResponse={onResponse} onError={onError} />);
+  render(
+    <SearchBox
+      dictionaryApi={dictionaryApi}
+      onSuccess={onSuccess}
+      onError={onError}
+    />,
+  );
 
   userEvent.type(screen.getByPlaceholderText('Word'), searchWord);
   userEvent.click(screen.getByText('Search'));
 
   await waitFor(() => {
-    expect(onResponse).toHaveBeenCalledWith({});
+    expect(onSuccess).toHaveBeenCalledTimes(1);
     expect(onError).toHaveBeenCalledTimes(0);
   });
 });
@@ -65,17 +91,23 @@ test('on button click, error message should return if no word is found', async (
         json: () => Promise.resolve({}),
       }) as Promise<Response>,
   );
-  const onResponse = jest.fn();
+  const onSuccess = jest.fn();
   const onError = jest.fn();
   const searchWord = 'hello';
 
-  render(<SearchBox onResponse={onResponse} onError={onError} />);
+  render(
+    <SearchBox
+      dictionaryApi={dictionaryApi}
+      onSuccess={onSuccess}
+      onError={onError}
+    />,
+  );
 
   userEvent.type(screen.getByPlaceholderText('Word'), searchWord);
   userEvent.click(screen.getByText('Search'));
 
   await waitFor(() => {
-    expect(onResponse).toHaveBeenCalledTimes(0);
+    expect(onSuccess).toHaveBeenCalledTimes(0);
     expect(onError).toHaveBeenCalledWith(`${searchWord} not found`);
   });
 });
@@ -89,17 +121,23 @@ test('on button click, error message should return if server returns status code
         json: () => Promise.reject(new Error('Internal Server Error')),
       }) as Promise<Response>,
   );
-  const onResponse = jest.fn();
+  const onSuccess = jest.fn();
   const onError = jest.fn();
   const searchWord = 'hello';
 
-  render(<SearchBox onResponse={onResponse} onError={onError} />);
+  render(
+    <SearchBox
+      dictionaryApi={dictionaryApi}
+      onSuccess={onSuccess}
+      onError={onError}
+    />,
+  );
 
   userEvent.type(screen.getByPlaceholderText('Word'), searchWord);
   userEvent.click(screen.getByText('Search'));
 
   await waitFor(() => {
-    expect(onResponse).toHaveBeenCalledTimes(0);
+    expect(onSuccess).toHaveBeenCalledTimes(0);
     expect(onError).toHaveBeenCalledWith(
       'Something went wrong. Please try again.',
     );
@@ -110,17 +148,23 @@ test('on button click, error message should return if exception occurs', async (
   global.fetch = jest.fn(() =>
     Promise.reject(new Error('Some error occurred')),
   );
-  const onResponse = jest.fn();
+  const onSuccess = jest.fn();
   const onError = jest.fn();
   const searchWord = 'hello';
 
-  render(<SearchBox onResponse={onResponse} onError={onError} />);
+  render(
+    <SearchBox
+      dictionaryApi={dictionaryApi}
+      onSuccess={onSuccess}
+      onError={onError}
+    />,
+  );
 
   userEvent.type(screen.getByPlaceholderText('Word'), searchWord);
   userEvent.click(screen.getByText('Search'));
 
   await waitFor(() => {
-    expect(onResponse).toHaveBeenCalledTimes(0);
+    expect(onSuccess).toHaveBeenCalledTimes(0);
     expect(onError).toHaveBeenCalledWith(
       'Something went wrong. Please try again.',
     );
