@@ -1,26 +1,15 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
+import SearchBox from './components/SearchBox/SearchBox';
+import { DictionaryAPIResponse } from './types';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [response, setResponse] = useState<DictionaryAPIResponse | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  return <SearchBox onResponse={setResponse} onError={setErrorMessage} />;
 }
 
 export default App;
