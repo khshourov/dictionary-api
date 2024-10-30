@@ -17,6 +17,15 @@ const validResponse = {
     lastAccessAt: '2024-10-28T16:20:42.846Z',
   },
 };
+const invalidResponse = {
+  dictionaryWord: {
+    word: searchWord,
+  },
+  accessSummary: {
+    totalAccess: 1,
+    lastAccessAt: '2024-10-28T16:20:42.846Z',
+  },
+};
 const dictionaryApi = new DictionaryApi({ token: 'bearer-token' });
 
 beforeAll(() => {
@@ -109,6 +118,38 @@ test('on button click, error message should return if no word is found', async (
   await waitFor(() => {
     expect(onSuccess).toHaveBeenCalledTimes(0);
     expect(onError).toHaveBeenCalledWith(`${searchWord} not found`);
+  });
+});
+
+test('on button click, error message should return if api returns invalid response', async () => {
+  global.fetch = jest.fn(
+    () =>
+      Promise.resolve({
+        ok: true,
+        status: 200,
+        json: () => Promise.resolve(invalidResponse),
+      }) as Promise<Response>,
+  );
+  const onSuccess = jest.fn();
+  const onError = jest.fn();
+  const searchWord = 'hello';
+
+  render(
+    <SearchBox
+      dictionaryApi={dictionaryApi}
+      onSuccess={onSuccess}
+      onError={onError}
+    />,
+  );
+
+  userEvent.type(screen.getByPlaceholderText('Word'), searchWord);
+  userEvent.click(screen.getByText('Search'));
+
+  await waitFor(() => {
+    expect(onSuccess).toHaveBeenCalledTimes(0);
+    expect(onError).toHaveBeenCalledWith(
+      'Something went wrong. Please try again.',
+    );
   });
 });
 
