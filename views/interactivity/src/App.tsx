@@ -6,7 +6,6 @@ import { SearchResultView } from './components/search-result-view/SearchResultVi
 import { DictionaryEntry } from './components/types';
 
 function App() {
-  const [bearerToken, setBearerToken] = useState<string | null>('bearer-token');
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [response, setResponse] = useState<DictionaryEntry | null>({
     dictionaryWord: {
@@ -51,14 +50,10 @@ function App() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  useEffect(() => {
-    const token = document.querySelector('meta[name="jwt-token"]');
-    if (token) {
-      setBearerToken(token.getAttribute('content'));
-    }
-  }, []);
-
+  const queryParams = new URLSearchParams(window.location.search);
+  const bearerToken = queryParams.get('token');
   if (!bearerToken) {
+    window.location.href = '/auth/google';
     return <></>;
   }
 
