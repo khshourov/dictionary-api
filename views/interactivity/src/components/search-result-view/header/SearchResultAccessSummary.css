@@ -1,0 +1,21 @@
+.access-info-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-left;
+  gap: 1em;
+}
+.access-info-container > .access-info {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+}
+.icon {
+  width: 1em;
+  height: 1em;
+}
+.access-info > .access-content {
+  margin-top: 0.35em;
+}

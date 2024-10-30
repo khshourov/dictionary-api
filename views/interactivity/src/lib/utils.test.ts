@@ -24,3 +24,11 @@ describe('decodeBase64Gzip()', () => {
     expect(uncompressed).toBe('some text');
   });
 });
+
+describe('iso8601ToDateTime()', () => {
+  test('function should return datetime string when iso 8601 datetime is given', () => {
+    expect(utils.iso8601ToDateTime('2024-01-01T00:00:00.000Z')).toBe(
+      '2024-01-01 00:00:00',
+    );
+  });
+});
