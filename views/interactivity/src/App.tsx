@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import { DictionaryApi } from './components/api/dictionary';
 import SearchBox from './components/search-box/SearchBox';
-import { DictionaryEntry } from './types';
+import { DictionaryEntry } from './components/types';
 
 function App() {
   const [bearerToken, setBearerToken] = useState<string | null>(null);

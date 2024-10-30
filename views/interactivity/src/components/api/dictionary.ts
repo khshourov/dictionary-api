@@ -1,10 +1,10 @@
 import { Utils } from '../../lib/utils';
-import { DictionaryEntry } from '../../types';
 import { AuthorizationError } from '../../error/authorization';
 import { InternalServerError } from '../../error/server';
 import { NotFoundError } from '../../error/not-found';
 import { lexicalEntrySchema, responseSchema } from './dictionary.validator';
 import { InvalidResponseError } from '../../error/invalid-response';
+import { DictionaryEntry } from '../types';
 
 export class DictionaryApi {
   private token: string;

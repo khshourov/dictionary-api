@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { DictionaryEntry } from '../../types';
 import { DictionaryApi } from '../api/dictionary';
 import './SearchBox.css';
 import { NotFoundError } from '../../error/not-found';
+import { DictionaryEntry } from '../types';
 
 type Props = {
   dictionaryApi: DictionaryApi;

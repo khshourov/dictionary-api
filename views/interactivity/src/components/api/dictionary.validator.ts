@@ -1,4 +1,4 @@
-import { array, date, InferType, number, object, string } from 'yup';
+import { array, date, number, object, string } from 'yup';
 
 export const responseSchema = object({
   dictionaryWord: object({
@@ -41,14 +41,3 @@ export const lexicalEntrySchema = object({
     meanings: array().of(meaningSchema).required(),
   }).required(),
 });
-
-export type DictionaryWord = InferType<typeof lexicalEntrySchema>;
-export type AccessSummary = InferType<typeof responseSchema>['accessSummary'];
-export type DictionaryEntry = {
-  dictionaryWord: DictionaryWord;
-  accessSummary: AccessSummary;
-};
-export type RegionPronunciation = InferType<typeof ipaListingSchema>;
-export type IPAListings = DictionaryWord['entry']['ipaListings'];
-export type MeaningEnty = InferType<typeof meaningEntrySchema>;
-export type Meaning = InferType<typeof meaningSchema>;
