@@ -6,7 +6,7 @@ test('header should have the searched word and access-summary section (when prov
   const searchedWord = 'hello';
   const accessSummary = {
     totalAccess: 3,
-    lastAccessAt: '2024-01-01T00:00:00.000Z',
+    lastAccessAt: new Date('2024-01-01T00:00:00.000Z'),
   };
 
   render(

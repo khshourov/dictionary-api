@@ -1,0 +1,12 @@
+.meaning {
+  font-weight: 600;
+}
+ul {
+  list-style: none;
+}
+ul li:before {
+  content: '-  ';
+}
+.content ul:not(:first-of-type) {
+  margin-top: 1em;
+}

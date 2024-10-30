@@ -1,0 +1,18 @@
+.pronunciation-block {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  padding-bottom: 0.25em;
+  gap: 0.5em;
+}
+.pronunciation-block:last-child {
+  padding-bottom: 1em;
+}
+.ipa {
+  font-weight: 600;
+}
+.ipa > sup {
+  margin-left: 0.125em;
+  font-weight: 200;
+}

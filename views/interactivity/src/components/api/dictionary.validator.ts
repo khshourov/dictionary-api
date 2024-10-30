@@ -11,18 +11,18 @@ export const responseSchema = object({
   }).nullable(),
 });
 
-const ipaListingSchema = object({
+export const ipaListingSchema = object({
   category: string().nonNullable().defined(),
   ipa: string().required(),
   audio: string().url().required(),
 });
 
-const meaningEntrySchema = object({
+export const meaningEntrySchema = object({
   meaning: string().required(),
   examples: array().of(string()).required(),
 });
 
-const meaningSchema = object({
+export const meaningSchema = object({
   categories: string().required(),
   entries: array().of(meaningEntrySchema).required(),
 });

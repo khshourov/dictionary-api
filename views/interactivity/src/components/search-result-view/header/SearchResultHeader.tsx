@@ -8,11 +8,11 @@ export function SearchResultHeader({
   accessSummary,
 }: {
   word: string;
-  accessSummary: AccessSummary;
+  accessSummary: AccessSummary | null;
 }) {
   return (
     <div className="header-container" data-testid="header-container">
-      <div className="word">{word}</div>
+      <h1 className="word">{word}</h1>
       {accessSummary && (
         <SearchResultAccessSummary accessSummary={accessSummary} />
       )}
