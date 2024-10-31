@@ -16,14 +16,11 @@ export class DictionaryApi {
   }
 
   async fetch(searchWord: string): Promise<DictionaryEntry> {
-    const response = await fetch(
-      `${process.env.APP_BASE_URL}/dictionary/${searchWord}`,
-      {
-        headers: {
-          Authorization: `Bearer ${this.token}`,
-        },
+    const response = await fetch(`dictionary/${searchWord}`, {
+      headers: {
+        Authorization: `Bearer ${this.token}`,
       },
-    );
+    });
 
     if (!response.ok) {
       if (response.status === 401) {

@@ -23,7 +23,7 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "ci": "yarn run build && yarn run lint && yarn run check-format",
-    "app:install": "yarn run build && yarn run migration:run"
+    "app:install": "yarn run gulp && yarn run migration:run"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
@@ -50,8 +50,10 @@
     "@eslint/js": "^9.13.0",
     "@nestjs/cli": "^10.0.0",
     "@nestjs/schematics": "^10.0.0",
+    "@nestjs/serve-static": "^4.0.2",
     "@nestjs/testing": "^10.0.0",
     "@types/express": "^5.0.0",
+    "@types/hbs": "^4.0.4",
     "@types/jest": "^29.5.2",
     "@types/node": "^22.8.1",
     "@types/passport-google-oauth20": "^2.0.16",
@@ -63,6 +65,8 @@
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-prettier": "^5.0.0",
     "global": "^4.4.0",
+    "gulp": "^5.0.0",
+    "gulp-cli": "^3.0.0",
     "jest": "^29.5.0",
     "prettier": "^3.0.0",
     "source-map-support": "^0.5.21",

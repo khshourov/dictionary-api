@@ -6,47 +6,7 @@ import { SearchResultView } from './components/search-result-view/SearchResultVi
 import { DictionaryEntry } from './components/types';
 
 function App() {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [response, setResponse] = useState<DictionaryEntry | null>({
-    dictionaryWord: {
-      name: 'hello',
-      entry: {
-        ipaListings: {
-          uk: [
-            {
-              category: '',
-              ipa: '/heˈləʊ/',
-              audio:
-                'https://dictionary.cambridge.org/media/english/uk_pron/u/ukh/ukhef/ukheft_029.mp3',
-            },
-          ],
-          us: [
-            {
-              category: '',
-              ipa: '/heˈloʊ/',
-              audio:
-                'https://dictionary.cambridge.org/media/english/us_pron/h/hel/hello/hello.mp3',
-            },
-          ],
-        },
-        meanings: [
-          {
-            categories: 'exclamation, noun',
-            entries: [
-              {
-                meaning: 'used when meeting or greeting someone:',
-                examples: ["Hello, Paul. I haven't seen you for ages."],
-              },
-            ],
-          },
-        ],
-      },
-    },
-    accessSummary: {
-      totalAccess: 1,
-      lastAccessAt: new Date('2024-01-01T00:00:00.000Z'),
-    },
-  });
+  const [response, setResponse] = useState<DictionaryEntry | null>(null);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
