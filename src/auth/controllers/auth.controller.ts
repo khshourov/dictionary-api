@@ -1,11 +1,13 @@
 import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Request, Response } from 'express';
+import { Throttle } from '@nestjs/throttler';
 
 import { GoogleAuthGuard } from '../guards/google-auth.guard';
 import { GoogleUser } from '../interfaces/google-user.interface';
 
 @Controller('auth')
+@Throttle({ default: { limit: 5, ttl: 60000 } })
 export class AuthController {
   constructor(private jwtService: JwtService) {}
 
