@@ -4,3 +4,6 @@
   align-items: center;
   justify-content: space-between;
 }
+.pronunciation-container {
+  padding: 0.5em;
+}
