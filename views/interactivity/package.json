@@ -14,7 +14,6 @@
     "eslint-plugin-prettier": "^5.2.1",
     "pako": "^2.1.0",
     "react": "^18.3.1",
-    "react-app-rewired": "^2.2.1",
     "react-dom": "^18.3.1",
     "react-scripts": "5.0.1",
     "typescript": "^4.4.2",
@@ -22,10 +21,10 @@
     "yup": "^1.4.0"
   },
   "scripts": {
-    "start": "react-app-rewired start",
-    "build": "react-app-rewired build",
-    "test": "react-app-rewired test --watchAll=false --silent",
-    "eject": "react-app-rewired eject",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --watchAll=false --silent",
+    "eject": "react-scripts eject",
     "check-format": "prettier --check .",
     "format": "prettier --write .",
     "lint": "eslint 'src/**/*.{js,jsx,ts,tsx}'",
