@@ -4,6 +4,9 @@ import '@testing-library/jest-dom';
 import userEvent from '@testing-library/user-event';
 import SearchBox from './SearchBox';
 import { DictionaryApi } from '../api/dictionary';
+import { NotFoundError } from '../../error/not-found';
+import { InvalidResponseError } from '../../error/invalid-response';
+import { InternalServerError } from '../../error/server';
 
 const searchWord = 'innocuous';
 const validResponse = {
@@ -91,7 +94,7 @@ test('on button click, successful api response should returned', async () => {
   });
 });
 
-test('on button click, error message should return if no word is found', async () => {
+test('on button click, not-found error should return if no word is found', async () => {
   global.fetch = jest.fn(
     () =>
       Promise.resolve({
@@ -117,7 +120,7 @@ test('on button click, error message should return if no word is found', async (
 
   await waitFor(() => {
     expect(onSuccess).toHaveBeenCalledTimes(0);
-    expect(onError).toHaveBeenCalledWith(`${searchWord} not found`);
+    expect(onError).toHaveBeenCalledWith(expect.any(NotFoundError));
   });
 });
 
@@ -126,7 +129,7 @@ test('on button click, error message should return if api returns invalid respon
     () =>
       Promise.resolve({
         ok: true,
-        status: 200,
+        status: 404,
         json: () => Promise.resolve(invalidResponse),
       }) as Promise<Response>,
   );
@@ -147,9 +150,7 @@ test('on button click, error message should return if api returns invalid respon
 
   await waitFor(() => {
     expect(onSuccess).toHaveBeenCalledTimes(0);
-    expect(onError).toHaveBeenCalledWith(
-      'Something went wrong. Please try again.',
-    );
+    expect(onError).toHaveBeenCalledWith(expect.any(InvalidResponseError));
   });
 });
 
@@ -179,9 +180,7 @@ test('on button click, error message should return if server returns status code
 
   await waitFor(() => {
     expect(onSuccess).toHaveBeenCalledTimes(0);
-    expect(onError).toHaveBeenCalledWith(
-      'Something went wrong. Please try again.',
-    );
+    expect(onError).toHaveBeenCalledWith(expect.any(InternalServerError));
   });
 });
 
@@ -206,8 +205,6 @@ test('on button click, error message should return if exception occurs', async (
 
   await waitFor(() => {
     expect(onSuccess).toHaveBeenCalledTimes(0);
-    expect(onError).toHaveBeenCalledWith(
-      'Something went wrong. Please try again.',
-    );
+    expect(onError).toHaveBeenCalledWith(expect.any(Error));
   });
 });

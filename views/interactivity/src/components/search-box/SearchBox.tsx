@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { DictionaryApi } from '../api/dictionary';
 import './SearchBox.css';
-import { NotFoundError } from '../../error/not-found';
 import { DictionaryEntry } from '../types';
 
 type Props = {
   dictionaryApi: DictionaryApi;
   onSuccess: (response: DictionaryEntry) => void;
-  onError: (errorMessage: string) => void;
+  onError: (error: unknown) => void;
 };
 
 export default function SearchBox({
@@ -24,12 +23,8 @@ export default function SearchBox({
   async function handleSearch() {
     try {
       onSuccess(await dictionaryApi.fetch(searchWord));
-    } catch (err) {
-      if (err instanceof NotFoundError) {
-        onError(`${searchWord} not found`);
-      } else {
-        onError('Something went wrong. Please try again.');
-      }
+    } catch (err: unknown) {
+      onError(err);
     }
   }
 

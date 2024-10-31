@@ -4,17 +4,19 @@ import { DictionaryApi } from './components/api/dictionary';
 import SearchBox from './components/search-box/SearchBox';
 import { SearchResultView } from './components/search-result-view/SearchResultView';
 import { DictionaryEntry } from './components/types';
+import { NoBearerTokenError } from './error/no-token';
 
 function App() {
   const [response, setResponse] = useState<DictionaryEntry | null>(null);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [error, setError] = useState<unknown>(null);
 
   const queryParams = new URLSearchParams(window.location.search);
   const bearerToken = queryParams.get('token');
   if (!bearerToken) {
-    window.location.href = '/auth/google';
-    return <></>;
+    throw new NoBearerTokenError();
+  }
+  if (error) {
+    throw error;
   }
 
   const dictionaryApi = new DictionaryApi({ token: bearerToken });
@@ -23,7 +25,7 @@ function App() {
       <SearchBox
         dictionaryApi={dictionaryApi}
         onSuccess={setResponse}
-        onError={setErrorMessage}
+        onError={setError}
       />
       {response && <SearchResultView dictionaryEntry={response} />}
     </>
