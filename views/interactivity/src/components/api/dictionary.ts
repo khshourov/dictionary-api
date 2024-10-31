@@ -26,7 +26,7 @@ export class DictionaryApi {
       if (response.status === 401) {
         throw new AuthorizationError();
       } else if (response.status === 404) {
-        throw new NotFoundError();
+        throw new NotFoundError(`${searchWord} not found`);
       } else {
         throw new InternalServerError();
       }
