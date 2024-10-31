@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import userEvent from '@testing-library/user-event';
 import SearchBox from './SearchBox';
@@ -71,7 +71,8 @@ test('on button click, successful api response should returned', async () => {
       Promise.resolve({
         ok: true,
         status: 200,
-        json: () => Promise.resolve(validResponse),
+        // DictionaryApi changes the structure. So, we are deep cloning it.
+        json: () => Promise.resolve(JSON.parse(JSON.stringify(validResponse))),
       }) as Promise<Response>,
   );
   const onSuccess = jest.fn();
@@ -90,6 +91,74 @@ test('on button click, successful api response should returned', async () => {
 
   await waitFor(() => {
     expect(onSuccess).toHaveBeenCalledTimes(1);
+    expect(onError).toHaveBeenCalledTimes(0);
+  });
+});
+
+test('on `enter` key press, api should be called', async () => {
+  global.fetch = jest.fn(
+    () =>
+      Promise.resolve({
+        ok: true,
+        status: 200,
+        json: () => Promise.resolve(JSON.parse(JSON.stringify(validResponse))),
+      }) as Promise<Response>,
+  );
+  const onSuccess = jest.fn();
+  const onError = jest.fn();
+
+  render(
+    <SearchBox
+      dictionaryApi={dictionaryApi}
+      onSuccess={onSuccess}
+      onError={onError}
+    />,
+  );
+
+  const inputBox = screen.getByPlaceholderText('Word');
+  userEvent.type(inputBox, searchWord);
+  fireEvent.keyDown(inputBox, {
+    key: 'Enter',
+    code: 'Enter',
+    charCode: 13,
+  });
+
+  await waitFor(() => {
+    expect(onSuccess).toHaveBeenCalledTimes(1);
+    expect(onError).toHaveBeenCalledTimes(0);
+  });
+});
+
+test('on any other key press, api should not be called', async () => {
+  global.fetch = jest.fn(
+    () =>
+      Promise.resolve({
+        ok: true,
+        status: 200,
+        json: () => Promise.resolve(JSON.parse(JSON.stringify(validResponse))),
+      }) as Promise<Response>,
+  );
+  const onSuccess = jest.fn();
+  const onError = jest.fn();
+
+  render(
+    <SearchBox
+      dictionaryApi={dictionaryApi}
+      onSuccess={onSuccess}
+      onError={onError}
+    />,
+  );
+
+  const inputBox = screen.getByPlaceholderText('Word');
+  userEvent.type(inputBox, searchWord);
+  fireEvent.keyDown(inputBox, {
+    key: 'a',
+    code: 'KeyA',
+    charCode: 65,
+  });
+
+  await waitFor(() => {
+    expect(onSuccess).toHaveBeenCalledTimes(0);
     expect(onError).toHaveBeenCalledTimes(0);
   });
 });

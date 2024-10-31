@@ -35,6 +35,7 @@ export default function SearchBox({
         type="text"
         placeholder="Word"
         onChange={(event) => handleInput(event.target.value)}
+        onKeyDown={(event) => event.key === 'Enter' && handleSearch()}
       />
       <button
         className="btn btn--primary btn--inside"
