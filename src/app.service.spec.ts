@@ -3,6 +3,7 @@ import { AppService } from './app.service';
 import { ManifestReader } from './general/manifest-reader.interface';
 
 class FakeAssetManifestReader implements ManifestReader {
+  path: string = 'path/to/fake';
   read() {
     return {
       files: {

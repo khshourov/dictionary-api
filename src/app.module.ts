@@ -15,7 +15,10 @@ import { AssetManifestReader } from './general/asset-manifest-reader';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
+    ConfigModule.forRoot({
+      envFilePath: `${process.cwd()}/.env.${process.env.NODE_ENV ? `${process.env.NODE_ENV}` : 'dev'}`,
+      isGlobal: true,
+    }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public'),
       serveRoot: '/static',
@@ -47,7 +50,13 @@ import { AssetManifestReader } from './general/asset-manifest-reader';
     }),
     DictionaryRecordsModule,
     AuthModule,
-    JwtModule,
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        secret: configService.get<string>('JWT_SECRET'),
+      }),
+      inject: [ConfigService],
+    }),
   ],
   controllers: [AppController],
   providers: [
@@ -64,6 +73,6 @@ import { AssetManifestReader } from './general/asset-manifest-reader';
       useClass: ThrottlerGuard,
     },
   ],
-  exports: [AppService],
+  exports: [AppService, JwtModule],
 })
 export class AppModule {}

@@ -2,7 +2,7 @@ import { ManifestReader } from './manifest-reader.interface';
 import * as fs from 'fs';
 
 export class AssetManifestReader implements ManifestReader {
-  private path: string;
+  path: string;
 
   constructor(path: string) {
     this.path = path;
