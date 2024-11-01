@@ -22,7 +22,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "ci": "yarn run build && yarn run lint && yarn run check-format",
+    "ci": "yarn run build && yarn run lint && yarn run check-format && yarn run test",
     "app:build": "yarn run gulp",
     "app:install": "yarn run gulp && yarn run migration:run"
   },
