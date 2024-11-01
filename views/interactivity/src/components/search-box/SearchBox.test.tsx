@@ -31,24 +31,6 @@ const invalidResponse = {
 };
 const dictionaryApi = new DictionaryApi({ token: 'bearer-token' });
 
-beforeAll(() => {
-  process.env.APP_BASE_URL = '';
-
-  const meta = document.createElement('meta');
-  meta.name = 'jwt-token';
-  meta.content = 'mocked-jwt-token';
-  document.head.appendChild(meta);
-});
-
-afterAll(() => {
-  const meta = document.querySelector('meta[name="jwt-token"]');
-  if (meta) {
-    document.head.removeChild(meta);
-  }
-
-  delete process.env.APP_BASE_URL;
-});
-
 test('search box should contain a text box and a button', async () => {
   render(
     <SearchBox

@@ -23,7 +23,6 @@ export class AppController {
     }
     return res.render('index', {
       token,
-      domain: this.configService.get<string>('APP_BASE_URL'),
     });
   }
 }
