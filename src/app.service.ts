@@ -1,22 +1,14 @@
-import { Injectable } from '@nestjs/common';
-import * as fs from 'fs';
-import * as path from 'path';
+import { Inject, Injectable } from '@nestjs/common';
+import { ManifestReader } from './general/manifest-reader.interface';
 
 @Injectable()
 export class AppService {
   private manifest: Record<string, any>;
 
-  constructor() {
-    this.loadManifest();
-  }
-
-  private loadManifest() {
-    const manifestPath = path.join(
-      __dirname,
-      '..',
-      'public/asset-manifest.json',
-    );
-    this.manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+  constructor(
+    @Inject('ManifestReader') private manifestReader: ManifestReader,
+  ) {
+    this.manifest = manifestReader.read();
   }
 
   getAssetPath(asset: string): string {

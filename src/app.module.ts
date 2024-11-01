@@ -11,6 +11,7 @@ import { AppController } from './app.controller';
 import { JwtModule } from '@nestjs/jwt';
 import { AppService } from './app.service';
 import { APP_GUARD } from '@nestjs/core';
+import { AssetManifestReader } from './general/asset-manifest-reader';
 
 @Module({
   imports: [
@@ -50,6 +51,13 @@ import { APP_GUARD } from '@nestjs/core';
   ],
   controllers: [AppController],
   providers: [
+    {
+      provide: 'ManifestReader',
+      useFactory: () =>
+        new AssetManifestReader(
+          join(__dirname, '..', 'public/asset-manifest.json'),
+        ),
+    },
     AppService,
     {
       provide: APP_GUARD,
