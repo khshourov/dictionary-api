@@ -1,14 +1,10 @@
 import { Get, Controller, Query, Res } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { Response } from 'express';
 
 @Controller()
 export class AppController {
-  constructor(
-    private readonly jwtService: JwtService,
-    private readonly configService: ConfigService,
-  ) {}
+  constructor(private readonly jwtService: JwtService) {}
 
   @Get()
   async root(@Query('token') token: string, @Res() res: Response) {
