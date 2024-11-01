@@ -79,6 +79,29 @@ describe('lexical-entry schema validate', () => {
         },
       },
     ],
+    [
+      {
+        name: 'hello',
+        entry: {
+          ipaListings: {
+            us: [
+              {
+                category: '',
+                ipa: '/heˈloʊ/',
+                audio:
+                  'https://dictionary.cambridge.org/media/english/us_pron/h/hel/hello/hello.mp3',
+              },
+            ],
+          },
+          meanings: [
+            {
+              categories: '', // categories can be empty
+              entries: [],
+            },
+          ],
+        },
+      },
+    ],
   ])('schema should accept all valid lexical-entries', (validObject) => {
     expect(lexicalEntrySchema.isValidSync(validObject)).toBe(true);
   });

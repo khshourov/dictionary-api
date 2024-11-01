@@ -23,7 +23,7 @@ export const meaningEntrySchema = object({
 });
 
 export const meaningSchema = object({
-  categories: string().required(),
+  categories: string().nonNullable().defined(),
   entries: array().of(meaningEntrySchema).required(),
 });
 
