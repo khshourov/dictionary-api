@@ -15,6 +15,8 @@ async function bootstrap() {
   app.setBaseViewsDir(join(__dirname, '..', 'views'));
   app.setViewEngine('hbs');
 
+  app.getHttpAdapter().getInstance().disable('x-powered-by');
+
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();
