@@ -401,6 +401,11 @@
   dependencies:
     levn "^0.4.1"
 
+"@golevelup/ts-jest@^0.5.6":
+  version "0.5.6"
+  resolved "https://registry.yarnpkg.com/@golevelup/ts-jest/-/ts-jest-0.5.6.tgz#e63e3d746417de07cbd5d45208de380cd185346a"
+  integrity sha512-QnxP42Qu9M2UogdrF2kxpZcgWeW9R3WoUr+LdpcsbkvX3LjEoDYgrJ/PnV/QUCbxB1gaKbhR0ZxlDxE1cPkpDg==
+
 "@gulpjs/messages@^1.1.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@gulpjs/messages/-/messages-1.1.0.tgz#94e70978ff676ade541faab459c37ae0c7095e5a"
