@@ -1,0 +1,76 @@
+#!/bin/bash
+
+# Define constants
+MARKER="\033[32m#\033[0m"
+
+# Define paths
+ROOT_ENV=".env.test"
+TEST_ENV="test/resources/.env.test"
+BACKUP_ENV=".env.test.backup"
+POSTGRES_COMPOSE_FILE="test/resources/postgresql.yml"
+
+get_env_var() {
+  local var_name="$1"
+  grep -E "^${var_name}=" "$ROOT_ENV" | cut -d '=' -f 2
+}
+
+title() {
+  echo -e "$MARKER $1" && sleep 1
+}
+
+linebreak() {
+  echo
+}
+
+title "Check if the test .env file exists in the source directory"
+if [ ! -f "$TEST_ENV" ]; then
+  echo "Error: $TEST_ENV does not exist. Aborting."
+  exit 1
+fi
+linebreak
+
+title "Back up the existing .env.test file if it exists"
+if [ -f "$ROOT_ENV" ]; then
+  echo "Backing up existing $ROOT_ENV to $BACKUP_ENV..."
+  cp "$ROOT_ENV" "$BACKUP_ENV" || { echo "Failed to create backup. Aborting."; exit 1; }
+fi
+linebreak
+
+title "Copy the new .env.test file to the root directory"
+echo "Replacing $ROOT_ENV with $TEST_ENV..."
+cp "$TEST_ENV" "$ROOT_ENV" || { echo "Failed to copy $TEST_ENV to $ROOT_ENV. Aborting."; exit 1; }
+linebreak
+
+title "Starting PostgreSQL container..."
+docker-compose --env-file "$ROOT_ENV" -f "$POSTGRES_COMPOSE_FILE" up -d || { echo "Failed to start Docker container. Aborting."; exit 1; }
+linebreak
+
+title "Wait for PostgreSQL to be ready"
+POSTGRES_USER=$(get_env_var "DB_USER")
+until docker exec -it $(docker ps -q -f "name=postgres-e2e") pg_isready -U "$POSTGRES_USER"; do
+  echo "Waiting for PostgreSQL to be ready..."
+  sleep 2
+done
+linebreak
+
+title "Run migration and the NestJS e2e tests"
+export NODE_ENV="test"
+yarn run migration:run && yarn run test:e2e
+linebreak
+
+title "Stopping PostgreSQL container..."
+docker-compose --env-file "$ROOT_ENV" -f "$POSTGRES_COMPOSE_FILE" down --volumes
+linebreak
+
+title "Restore the original .env.test file if it existed"
+if [ -f "$BACKUP_ENV" ]; then
+  echo "Restoring the original $ROOT_ENV from backup..."
+  mv "$BACKUP_ENV" "$ROOT_ENV" || { echo "Failed to restore original .env.test. Please check manually."; exit 1; }
+else
+  # If no original .env.test existed, remove the temporary one after testing
+  echo "No original .env.test backup found. Cleaning up temporary file."
+  rm "$ROOT_ENV"
+fi
+linebreak
+
+title "Test run completed successfully."

@@ -1,3 +1,4 @@
+process.env.DOTENV_CONFIG_PATH = `${process.cwd()}/.env.${process.env.NODE_ENV ? `${process.env.NODE_ENV}` : 'dev'}`;
 import 'dotenv/config';
 import { DataSource } from 'typeorm';
 import { DictionaryWord } from '../dictionary-records/entities/dictionary-record.entity';
