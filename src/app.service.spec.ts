@@ -37,17 +37,16 @@ describe('AppService', () => {
     }).compile();
 
     appService = app.get(AppService);
-    console.log(app.get('ManifestReader'));
   });
 
   describe('getAssetPath()', () => {
-    test('it should return if asset is present in the manifest file', () => {
+    it('should return if asset is present in the manifest file', () => {
       expect(appService.getAssetPath('main.js')).toBe(
         '/static/js/main.3503c318.js',
       );
     });
 
-    test('it should return empty if asset is not present in the manifest file', () => {
+    it('should return empty if asset is not present in the manifest file', () => {
       expect(appService.getAssetPath('index.js')).toBe('');
     });
   });
