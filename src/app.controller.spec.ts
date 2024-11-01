@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AppController } from './app.controller';
-import { JwtService, JwtVerifyOptions } from '@nestjs/jwt';
+import { JwtService } from '@nestjs/jwt';
 import { createMock } from '@golevelup/ts-jest';
 import { Response } from 'express';
 
@@ -10,12 +10,12 @@ interface MockedResponse extends Response {
 }
 
 class MockJwtService extends JwtService {
-  verifyAsync<User>(token: string, options?: JwtVerifyOptions): Promise<User> {
-      return Promise.resolve({
-        id: '1001',
-        name: 'John Doe',
-        email: 'john.doe@example.com',
-      } as User)
+  verifyAsync<User>(): Promise<User> {
+    return Promise.resolve({
+      id: '1001',
+      name: 'John Doe',
+      email: 'john.doe@example.com',
+    } as User);
   }
 }
 
@@ -61,6 +61,6 @@ describe('AppController', () => {
       await appController.root(invalidToken, res);
 
       expect(res.redirect).toHaveBeenCalledWith('/auth/google');
-    })
+    });
   });
 });
