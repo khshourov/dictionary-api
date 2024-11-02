@@ -22,6 +22,19 @@ linebreak() {
   echo
 }
 
+restore_env() {
+  title "Restore the original .env.test file if it existed"
+  if [ -f "$BACKUP_ENV" ]; then
+    echo "Restoring the original $ROOT_ENV from backup..."
+    mv "$BACKUP_ENV" "$ROOT_ENV" || { echo "Failed to restore original .env.test. Please check manually."; exit 1; }
+  else
+    # If no original .env.test existed, remove the temporary one after testing
+    echo "No original .env.test backup found. Cleaning up temporary file."
+    rm "$ROOT_ENV"
+  fi
+  linebreak
+}
+
 title "Check if the test .env file exists in the source directory"
 if [ ! -f "$TEST_ENV" ]; then
   echo "Error: $TEST_ENV does not exist. Aborting."
@@ -38,11 +51,19 @@ linebreak
 
 title "Copy the new .env.test file to the root directory"
 echo "Replacing $ROOT_ENV with $TEST_ENV..."
-cp "$TEST_ENV" "$ROOT_ENV" || { echo "Failed to copy $TEST_ENV to $ROOT_ENV. Aborting."; exit 1; }
+cp "$TEST_ENV" "$ROOT_ENV" || {
+  echo "Failed to copy $TEST_ENV to $ROOT_ENV. Aborting.";
+  restore_env
+  exit 1;
+}
 linebreak
 
 title "Starting PostgreSQL container..."
-docker-compose --env-file "$ROOT_ENV" -f "$POSTGRES_COMPOSE_FILE" up -d || { echo "Failed to start Docker container. Aborting."; exit 1; }
+docker-compose --env-file "$ROOT_ENV" -f "$POSTGRES_COMPOSE_FILE" up -d || {
+  echo "Failed to start Docker container. Aborting.";
+  restore_env
+  exit 1;
+}
 linebreak
 
 title "Wait for PostgreSQL to be ready"
@@ -62,15 +83,6 @@ title "Stopping PostgreSQL container..."
 docker-compose --env-file "$ROOT_ENV" -f "$POSTGRES_COMPOSE_FILE" down --volumes
 linebreak
 
-title "Restore the original .env.test file if it existed"
-if [ -f "$BACKUP_ENV" ]; then
-  echo "Restoring the original $ROOT_ENV from backup..."
-  mv "$BACKUP_ENV" "$ROOT_ENV" || { echo "Failed to restore original .env.test. Please check manually."; exit 1; }
-else
-  # If no original .env.test existed, remove the temporary one after testing
-  echo "No original .env.test backup found. Cleaning up temporary file."
-  rm "$ROOT_ENV"
-fi
-linebreak
+restore_env
 
 title "Test run completed successfully."
