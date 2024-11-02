@@ -4,9 +4,9 @@
 MARKER="\033[32m#\033[0m"
 
 # Define paths
-ROOT_ENV=".env.test"
-TEST_ENV="test/resources/.env.test"
-BACKUP_ENV=".env.test.backup"
+ROOT_ENV=".env.testing"
+TEST_ENV="test/resources/.env.testing"
+BACKUP_ENV=".env.testing.backup"
 POSTGRES_COMPOSE_FILE="test/resources/postgresql.yml"
 
 get_env_var() {
@@ -75,7 +75,7 @@ done
 linebreak
 
 title "Run migration and the NestJS e2e tests"
-export NODE_ENV="test"
+export NODE_ENV="testing"
 yarn run migration:run && yarn run jest --config ./test/jest-e2e.json
 linebreak
 
