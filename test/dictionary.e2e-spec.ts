@@ -89,7 +89,7 @@ describe('DictionaryController (e2e)', () => {
         expect(accessSummary).not.toBeUndefined();
         expect(accessSummary.totalAccess).toBe(1);
       });
-  })
+  });
 
   afterAll(async () => {
     await app.close();
