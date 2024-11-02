@@ -55,7 +55,7 @@ linebreak
 
 title "Run migration and the NestJS e2e tests"
 export NODE_ENV="test"
-yarn run migration:run && yarn run test:e2e
+yarn run migration:run && yarn run jest --config ./test/jest-e2e.json
 linebreak
 
 title "Stopping PostgreSQL container..."
