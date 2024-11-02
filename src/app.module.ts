@@ -16,7 +16,7 @@ import { AssetManifestReader } from './general/asset-manifest-reader';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: `${process.cwd()}/.env.${process.env.NODE_ENV ? `${process.env.NODE_ENV}` : 'dev'}`,
+      envFilePath: `${process.cwd()}/.env.${process.env.NODE_ENV ?? 'dev'}`,
       isGlobal: true,
     }),
     ServeStaticModule.forRoot({
