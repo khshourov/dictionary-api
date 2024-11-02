@@ -12,12 +12,14 @@ import { JwtModule } from '@nestjs/jwt';
 import { AppService } from './app.service';
 import { APP_GUARD } from '@nestjs/core';
 import { AssetManifestReader } from './general/asset-manifest-reader';
+import { envValidationSchema } from './general/env.validator';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       envFilePath: `${process.cwd()}/.env.${process.env.NODE_ENV ?? 'dev'}`,
       isGlobal: true,
+      validationSchema: envValidationSchema,
     }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public'),
