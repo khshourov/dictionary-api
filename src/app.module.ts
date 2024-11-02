@@ -58,7 +58,7 @@ import { envValidationSchema } from './general/env.validator';
         secret: configService.get<string>('JWT_SECRET'),
         signOptions: {
           expiresIn: configService.get<string>('JWET_EXPIRES_IN'),
-        }
+        },
       }),
       inject: [ConfigService],
     }),
