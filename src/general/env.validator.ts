@@ -1,6 +1,6 @@
-import {object} from 'joi';
+import * as Joi from 'joi';
 
-export const envValidationSchema = object({
+export const envValidationSchema = Joi.object({
   PORT: Joi.number().default(3000),
 
   THROTTLE_TTL: Joi.number().min(1).required(),
