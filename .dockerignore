@@ -1,0 +1,15 @@
+# We have only added that maybe larger in size or some historical records.
+# Rest of the files/directories don't occupy too many spaces.
+# In production build, we'll only copy the necessary directories.
+Dockerfile
+Dockerfile.migrate
+.dockerignore
+.git
+.github
+dist
+node_modules
+
+# React project specific ignore files
+views/interactivity/build
+view/interactivity/node_modules
+view/interactivity/public
