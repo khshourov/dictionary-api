@@ -21,8 +21,12 @@ export default function SearchBox({
   }
 
   async function handleSearch() {
+    if (searchWord.trim().length === 0) {
+      return;
+    }
+
     try {
-      onSuccess(await dictionaryApi.fetch(searchWord));
+      onSuccess(await dictionaryApi.fetch(searchWord.trim()));
     } catch (err: unknown) {
       onError(err);
     }
@@ -41,6 +45,7 @@ export default function SearchBox({
         className="btn btn--primary btn--inside"
         type="button"
         onClick={handleSearch}
+        disabled={searchWord.trim().length === 0}
       >
         Search
       </button>

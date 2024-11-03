@@ -77,6 +77,30 @@ test('on button click, successful api response should returned', async () => {
   });
 });
 
+test('when input box is empty, search button should be disabled', async () => {
+  global.fetch = jest.fn();
+  const onSuccess = jest.fn();
+  const onError = jest.fn();
+
+  render(
+    <SearchBox
+      dictionaryApi={dictionaryApi}
+      onSuccess={onSuccess}
+      onError={onError}
+    />,
+  );
+
+  const inputBox = screen.getByPlaceholderText('Word');
+  userEvent.type(inputBox, '  ');
+  userEvent.click(screen.getByText('Search'));
+
+  await waitFor(() => {
+    expect(global.fetch).toHaveBeenCalledTimes(0);
+    expect(onSuccess).toHaveBeenCalledTimes(0);
+    expect(onError).toHaveBeenCalledTimes(0);
+  });
+});
+
 test('on `enter` key press, api should be called', async () => {
   global.fetch = jest.fn(
     () =>
@@ -107,6 +131,34 @@ test('on `enter` key press, api should be called', async () => {
 
   await waitFor(() => {
     expect(onSuccess).toHaveBeenCalledTimes(1);
+    expect(onError).toHaveBeenCalledTimes(0);
+  });
+});
+
+test('when input box is empty, pressing `enter` enter should not call api', async () => {
+  global.fetch = jest.fn();
+  const onSuccess = jest.fn();
+  const onError = jest.fn();
+
+  render(
+    <SearchBox
+      dictionaryApi={dictionaryApi}
+      onSuccess={onSuccess}
+      onError={onError}
+    />,
+  );
+
+  const inputBox = screen.getByPlaceholderText('Word');
+  userEvent.type(inputBox, '   ');
+  fireEvent.keyDown(inputBox, {
+    key: 'Enter',
+    code: 'Enter',
+    charCode: 13,
+  });
+
+  await waitFor(() => {
+    expect(global.fetch).toHaveBeenCalledTimes(0);
+    expect(onSuccess).toHaveBeenCalledTimes(0);
     expect(onError).toHaveBeenCalledTimes(0);
   });
 });
