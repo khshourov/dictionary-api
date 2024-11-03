@@ -46,7 +46,10 @@ import { envValidationSchema } from './general/env.validator';
         database: configService.get<string>('DB_DATABASE'),
         autoLoadEntities: true,
         synchronize: false, // Note: set to false in production
-        logging: ['query', 'error'],
+        logging:
+          process.env.NODE_ENV === 'production'
+            ? ['error']
+            : ['query', 'error'],
       }),
       inject: [ConfigService],
     }),
