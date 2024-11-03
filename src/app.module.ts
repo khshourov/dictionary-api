@@ -46,6 +46,8 @@ import { envValidationSchema } from './general/env.validator';
         database: configService.get<string>('DB_DATABASE'),
         autoLoadEntities: true,
         synchronize: false, // Note: set to false in production
+        migrations: [`${__dirname}/migrations/*.{ts,js}`],
+        migrationsRun: true,
         logging:
           process.env.NODE_ENV === 'production'
             ? ['error']
