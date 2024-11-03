@@ -24,7 +24,7 @@
     "test:e2e": "scripts/run-e2e",
     "ci": "yarn run build && yarn run lint && yarn run check-format && yarn run test",
     "app:build": "yarn run gulp",
-    "app:install": "yarn run gulp && yarn run migration:run"
+    "app:install": "NODE_ENV=production yarn run gulp && yarn run migration:run"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
