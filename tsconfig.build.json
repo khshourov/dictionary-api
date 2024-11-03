@@ -1,4 +1,4 @@
 {
   "extends": "./tsconfig.json",
-  "exclude": ["node_modules", "test", "dist", "**/*spec.ts", "views/interactivity"]
+  "exclude": ["node_modules", "test", "dist", "**/*spec.ts", "views/interactivity", "typeorm.config.ts"]
 }
