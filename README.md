@@ -1,99 +1,159 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+<a id="readme-top"></a>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+<!-- PROJECT LOGO -->
+<br />
+<div align="center">
 
-## Description
+<h3 align="center">Dictionary API</h3>
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+  <p align="center">
+    This project provides a web interface around npm package <a href="https://www.npmjs.com/package/dictionary-scraper">dictionary-scraper</a>
+    <br />
+    <a href="https://github.com/khshourov/dictionary-api/wiki"><strong>Explore the docs »</strong></a>
+    <br />
+    <br />
+    <a href="#">View Demo</a>
+    ·
+    <a href="https://github.com/khshourov/dictionary-api/issues/new?assignees=&labels=&projects=&template=bug_report.md&title=">Report Bug</a>
+    ·
+    <a href="https://github.com/khshourov/dictionary-api/issues/new?assignees=&labels=&projects=&template=feature_request.md&title=">Request Feature</a>
+  </p>
+</div>
 
-## Project setup
 
-```bash
-$ yarn install
-```
 
-## Compile and run the project
+<!-- TABLE OF CONTENTS -->
+<details>
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#about-the-project">About The Project</a>
+      <ul>
+        <li><a href="#built-with">Built With</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#getting-started">Getting Started</a>
+      <ul>
+        <li><a href="#prerequisites">Prerequisites</a></li>
+        <li><a href="#installation">Installation</a></li>
+      </ul>
+    </li>
+    <li><a href="#roadmap">Roadmap</a></li>
+    <li><a href="#license">License</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="#acknowledgments">Acknowledgments</a></li>
+  </ol>
+</details>
 
-```bash
-# development
-$ yarn run start
 
-# watch mode
-$ yarn run start:dev
 
-# production mode
-$ yarn run start:prod
-```
+<!-- ABOUT THE PROJECT -->
+## About The Project
 
-## Run tests
+This project is primarily built on the [dictionary-scraper](https://www.npmjs.com/package/dictionary-scraper) npm package. It enhances the package’s functionality by adding caching and access information. Additionally, it provides Google authentication to allow the application to store records for each user. The application also includes a minimal web interface, providing users with exactly what they need.
 
-```bash
-# unit tests
-$ yarn run test
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-# e2e tests
-$ yarn run test:e2e
 
-# test coverage
-$ yarn run test:cov
-```
 
-## Deployment
+### Built With
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+* [![Nest][NestJS]][NestJS-url]
+* [![React][React.js]][React-url]
+* [![Postgresql][Postgresql]][Postgresql-url]
+* [![Docker][Docker]][Docker-url]
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-```bash
-$ yarn install -g mau
-$ mau deploy
-```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
 
-## Resources
+<!-- GETTING STARTED -->
+## Getting Started
 
-Check out a few resources that may come in handy when working with NestJS:
+### Prerequisites
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+* Node.js 22
+* Docker
+* Google OAuth 2.0 secret. Go to [Google Cloud](https://console.cloud.google.com) to create your own client-id and client-secret.
+* Postgresql
 
-## Support
+### Installation
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+#### - Local installation (without docker)
+1. Copy .env.example to .env.production and set all the necessary properties.
+2. Run `yarn app:install`.
+3. Run `yarn start:prod` to launch the application.
 
-## Stay in touch
+Visit [http://localhost:3000](http://localhost:3000) to access the web page.
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+#### - Local installation (with docker-compose)
+The docker-compose.yml file includes a PostgreSQL container, so no additional setup is needed to configure a database.
 
+1. Copy .env.example to .env and set all the required properties.
+2. Run `docker-compose up migrate --build && docker-compose down migrate --rmi local --volumes`. This command will start the PostgreSQL server, create the database, and set up the necessary tables.
+3. Start the application container with  `docker-compose up app -d --build`
+
+Visit [http://localhost:3000](http://localhost:3000) to access the web page.
+
+#### - Local installation (with docker)
+This installation only creates the app container. You will need to set up your own PostgreSQL instance separately.
+
+1. Copy .env.example to .env and set all the required properties.
+2. Run `docker-compose up migrate --build && docker-compose down migrate --rmi local --volumes`. This command will start the PostgreSQL server, create the database, and set up the necessary tables.
+3. Build app image: `docker build -t app .`
+4. Start the application container with `docker run -d --name app --env-file .env -p 3000:3000 app`
+
+Visit [http://localhost:3000](http://localhost:3000) to access the web page.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+
+<!-- ROADMAP -->
+## Roadmap
+
+- [ ] Delete/Export data
+
+See the [open issues](https://github.com/khshourov/dictionary-api/issues) for a full list of proposed features (and known issues).
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+
+<!-- LICENSE -->
 ## License
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+Distributed under the MIT License. See `LICENSE.txt` for more information.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+
+<!-- CONTACT -->
+## Contact
+
+Kamrul H Shourov - shourov.kamrul@gmail.com
+
+Project Link: [https://github.com/khshourov/dictionary-api](https://github.com/khshourov/dictionary-api/)
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+
+<!-- ACKNOWLEDGMENTS -->
+## Acknowledgments
+
+* [Docker image size optimization](https://dev.to/andreasbergstrom/configure-typeorm-migrations-in-5-minutes-2njg)
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+[NestJS]: https://img.shields.io/badge/-NestJs-ea2845?style=flat-square&logo=nestjs&logoColor=white
+[NestJS-url]: https://nestjs.com/
+[React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
+[React-url]: https://reactjs.org/
+[Postgresql]: https://img.shields.io/badge/postgresql-4169e1?style=for-the-badge&logo=postgresql&logoColor=white
+[Postgresql-url]: https://www.postgresql.org/
+[Docker]: https://img.shields.io/badge/docker-257bd6?style=for-the-badge&logo=docker&logoColor=white
+[Docker-url]: https://www.docker.com
