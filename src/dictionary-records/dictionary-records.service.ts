@@ -48,7 +48,6 @@ export class DictionaryRecordService {
         word,
         lexicalEntry: zipped,
       });
-      console.log(dictionaryWord);
     }
 
     return dictionaryWord;
