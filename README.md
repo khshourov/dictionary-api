@@ -79,6 +79,10 @@ This project is primarily built on the [dictionary-scraper](https://www.npmjs.co
 * Google OAuth 2.0 secret. Go to [Google Cloud](https://console.cloud.google.com) to create your own client-id and client-secret.
 * Postgresql
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+
 ### Installation
 
 #### - Local installation (without docker)
