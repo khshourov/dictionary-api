@@ -29,7 +29,7 @@
     "check-format": "prettier --check .",
     "format": "prettier --write .",
     "lint": "eslint 'src/**/*.{js,jsx,ts,tsx}'",
-    "ci": "yarn run build && yarn run check-format && yarn run lint && yarn run test"
+    "ci": "CI=true yarn run build && yarn run check-format && yarn run lint && yarn run test"
   },
   "eslintConfig": {
     "extends": [

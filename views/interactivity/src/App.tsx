@@ -31,13 +31,13 @@ function App() {
   if (!bearerToken) {
     throw new NoBearerTokenError();
   }
-  let searchWord = queryParams.get('searchWord');
+  const searchWord = queryParams.get('searchWord');
   const dictionaryApi = new DictionaryApi({ token: bearerToken });
 
   useEffect(() => {
-    if (searchWord && (searchWord = searchWord.trim()).length > 0) {
+    if (searchWord && searchWord.trim().length > 0) {
       dictionaryApi
-        .fetch(searchWord)
+        .fetch(searchWord.trim())
         .then((response) => {
           handleSuccess(response);
         })
@@ -45,7 +45,7 @@ function App() {
           handleError(err);
         });
     }
-  }, []);
+  });
 
   return (
     <>
