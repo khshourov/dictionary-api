@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import { DictionaryApi } from './components/api/dictionary';
 import { ErrorResultView } from './components/general/ErrorResultView';
@@ -21,20 +21,41 @@ function App() {
     setError(error);
   }
 
+  function hasSearchWord() {
+    const searchWord = queryParams.get('searchWord');
+    return searchWord && searchWord.trim().length > 0;
+  }
+
   const queryParams = new URLSearchParams(window.location.search);
   const bearerToken = queryParams.get('token');
   if (!bearerToken) {
     throw new NoBearerTokenError();
   }
-
+  let searchWord = queryParams.get('searchWord');
   const dictionaryApi = new DictionaryApi({ token: bearerToken });
+
+  useEffect(() => {
+    if (searchWord && (searchWord = searchWord.trim()).length > 0) {
+      dictionaryApi
+        .fetch(searchWord)
+        .then((response) => {
+          handleSuccess(response);
+        })
+        .catch((err) => {
+          handleError(err);
+        });
+    }
+  }, []);
+
   return (
     <>
-      <SearchBox
-        dictionaryApi={dictionaryApi}
-        onSuccess={handleSuccess}
-        onError={handleError}
-      />
+      {!hasSearchWord() && (
+        <SearchBox
+          dictionaryApi={dictionaryApi}
+          onSuccess={handleSuccess}
+          onError={handleError}
+        />
+      )}
       <div className="search-result-container">
         <>
           {response && <SearchResultView dictionaryEntry={response} />}
