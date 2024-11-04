@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import './App.css';
 import { DictionaryApi } from './components/api/dictionary';
 import { ErrorResultView } from './components/general/ErrorResultView';
@@ -32,7 +32,10 @@ function App() {
     throw new NoBearerTokenError();
   }
   const searchWord = queryParams.get('searchWord');
-  const dictionaryApi = new DictionaryApi({ token: bearerToken });
+  const dictionaryApi = useMemo(
+    () => new DictionaryApi({ token: bearerToken }),
+    [bearerToken],
+  );
 
   useEffect(() => {
     if (searchWord && searchWord.trim().length > 0) {
@@ -45,7 +48,7 @@ function App() {
           handleError(err);
         });
     }
-  });
+  }, [dictionaryApi, searchWord]);
 
   return (
     <>
