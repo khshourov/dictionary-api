@@ -10,20 +10,6 @@
   </head>
   <body>
     <div id="root"></div>
-    <script>
-      const params = new URLSearchParams(window.location.search);
-      const token = params.get('token');
-      if (token) {
-        // Check if page accessed in plugin context
-        if (typeof browser !== 'undefined' &&
-          typeof browser.storage !== 'undefined' &&
-          typeof browser.storage.local !== 'undefined') {
-          browser.storage.local.set('authToken', token);
-        } else {
-          localStorage.setItem('authToken', token);
-        }
-      }
-    </script>
     <script src="{{assetPath 'main.js'}}"></script>
   </body>
 </html>
