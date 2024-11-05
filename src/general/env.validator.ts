@@ -17,5 +17,5 @@ export const envValidationSchema = Joi.object({
   GOOGLE_REDIRECT_URL: Joi.string().uri().required(),
 
   JWT_SECRET: Joi.string().required(),
-  JWET_EXPIRES_IN: Joi.string().default('24h'),
+  JWT_EXPIRES_IN: Joi.string().default('24h'),
 });
