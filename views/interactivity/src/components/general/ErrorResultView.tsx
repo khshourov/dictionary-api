@@ -9,7 +9,7 @@ export function ErrorResultView({ error }: { error: any }) {
     error instanceof AuthorizationError ||
     error instanceof NoBearerTokenError
   ) {
-    window.location.href = '/auth/login';
+    window.location.href = '/auth/google';
     return <></>;
   }
 
