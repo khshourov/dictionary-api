@@ -29,3 +29,33 @@ test('header should not have any access-summary section for first time access of
 
   expect(accessSummaryBlock).toBeNull();
 });
+
+test('header should display source-links if provided', async () => {
+  const searchedWord = 'hello';
+  const sourceLinks = ['http://example.com/1', 'http://example.com/2'];
+
+  render(
+    <SearchResultHeader
+      word={searchedWord}
+      sourceLinks={sourceLinks}
+      accessSummary={null}
+    />,
+  );
+
+  expect(screen.queryByTestId('source-link-1')).toBeInTheDocument();
+  expect(screen.queryByTestId('source-link-2')).toBeInTheDocument();
+});
+
+test('header should not display source-links if no link is provided', async () => {
+  const searchedWord = 'hello';
+
+  render(
+    <SearchResultHeader
+      word={searchedWord}
+      sourceLinks={null}
+      accessSummary={null}
+    />,
+  );
+
+  expect(screen.queryByTestId('source-link-1')).not.toBeInTheDocument();
+});

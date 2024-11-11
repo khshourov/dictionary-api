@@ -36,7 +36,7 @@
     "@nestjs/serve-static": "^4.0.2",
     "@nestjs/throttler": "^6.2.1",
     "@nestjs/typeorm": "^10.0.2",
-    "dictionary-scraper": "^1.0.5",
+    "dictionary-scraper": "1.1.0",
     "dotenv": "^16.4.5",
     "hbs": "^4.2.0",
     "joi": "^17.13.3",

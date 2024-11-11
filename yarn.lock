@@ -2294,10 +2294,10 @@ dezalgo@^1.0.4:
     asap "^2.0.0"
     wrappy "1"
 
-dictionary-scraper@^1.0.5:
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/dictionary-scraper/-/dictionary-scraper-1.0.5.tgz#ef6c3e53720da7e1ba09c10e606047271e39981e"
-  integrity sha512-rN/noeKpD9pIksjg/367Qz1Z9LJ55Eszy8/d2f2mlmKoRC6FD1sYt9viATXNCyIQpXzG2tjniANRzPMjsszlPA==
+dictionary-scraper@1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/dictionary-scraper/-/dictionary-scraper-1.1.0.tgz#bf6c426c443762eca979647e34943b3bedc400d5"
+  integrity sha512-0nsLouiqU7OWesBmyz7VUVxX1Hq8f1MMa0VPM+EGK4EtlmI58aDIhIVFeTVwe9sMHmAtzDKJXrrfVM+10dyWXA==
   dependencies:
     axios "^1.7.7"
     linkedom "^0.18.5"

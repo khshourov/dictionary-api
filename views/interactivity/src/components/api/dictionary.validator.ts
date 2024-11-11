@@ -29,6 +29,7 @@ export const meaningSchema = object({
 
 export const lexicalEntrySchema = object({
   name: string().required(),
+  sourceLinks: array().of(string().required()).optional(),
   entry: object({
     ipaListings: object({
       uk: array().of(ipaListingSchema).optional(),

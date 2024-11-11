@@ -6,6 +6,9 @@ test('it should display all the dictionary entry information', () => {
   const dictionaryEntry = {
     dictionaryWord: {
       name: 'hello',
+      sourceLinks: [
+        'https://dictionary.cambridge.org/pronunciation/english/hello',
+      ],
       entry: {
         ipaListings: {
           uk: [
@@ -47,6 +50,7 @@ test('it should display all the dictionary entry information', () => {
   render(<SearchResultView dictionaryEntry={dictionaryEntry} />);
 
   expect(screen.queryByTestId('header-container')).toBeInTheDocument();
+  expect(screen.queryByTestId('source-link-1')).toBeInTheDocument();
   expect(screen.getByTestId('divider')).toBeInTheDocument();
   expect(screen.queryByTestId('ipa-container')).toBeInTheDocument();
   expect(screen.getByText('Meanings')).toBeInTheDocument();

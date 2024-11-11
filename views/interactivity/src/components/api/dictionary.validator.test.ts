@@ -5,6 +5,10 @@ describe('lexical-entry schema validate', () => {
     [
       {
         name: 'hello',
+        sourceLinks: [
+          'https://dictionary.cambridge.org/pronunciation/english/hello',
+          'https://dictionary.cambridge.org/dictionary/english/hello',
+        ],
         entry: {
           ipaListings: {
             uk: [
@@ -96,6 +100,30 @@ describe('lexical-entry schema validate', () => {
           meanings: [
             {
               categories: '', // categories can be empty
+              entries: [],
+            },
+          ],
+        },
+      },
+    ],
+    [
+      {
+        name: 'hello',
+        sourceLinks: [], // sourceLinks can be empty
+        entry: {
+          ipaListings: {
+            us: [
+              {
+                category: '',
+                ipa: '/heˈloʊ/',
+                audio:
+                  'https://dictionary.cambridge.org/media/english/us_pron/h/hel/hello/hello.mp3',
+              },
+            ],
+          },
+          meanings: [
+            {
+              categories: 'noun',
               entries: [],
             },
           ],

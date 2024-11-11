@@ -14,6 +14,7 @@ export function SearchResultView({
     <div className="card">
       <SearchResultHeader
         word={dictionaryEntry.dictionaryWord.name}
+        sourceLinks={dictionaryEntry.dictionaryWord.sourceLinks}
         accessSummary={dictionaryEntry.accessSummary}
       />
       <div className="divider">
