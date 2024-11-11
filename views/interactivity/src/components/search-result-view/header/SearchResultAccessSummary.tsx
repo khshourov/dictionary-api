@@ -14,7 +14,7 @@ export function SearchResultAccessSummary({
       <div className="access-info">
         <Icon iconType="last-access-at" />
         <span className="access-content">
-          {new Utils().iso8601ToDateTime(accessSummary.lastAccessAt)}
+          {new Utils().iso8601ToDate(accessSummary.lastAccessAt)}
         </span>
         <Icon iconType="total-access" />
         <span className="access-content">{accessSummary.totalAccess}</span>

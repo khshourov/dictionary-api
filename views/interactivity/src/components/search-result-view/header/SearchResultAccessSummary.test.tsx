@@ -10,6 +10,6 @@ test('access-summary block should show last access date and total access for sea
 
   render(<SearchResultAccessSummary accessSummary={accessSummary} />);
 
-  expect(screen.getByText('2024-01-01 00:00:00')).toBeDefined();
+  expect(screen.getByText('2024-01-01')).toBeDefined();
   expect(screen.getByText('313')).toBeDefined();
 });

@@ -25,16 +25,14 @@ describe('decodeBase64Gzip()', () => {
   });
 });
 
-describe('iso8601ToDateTime()', () => {
-  test('function should return datetime string when iso-8601 datetime string is given', () => {
-    expect(utils.iso8601ToDateTime('2024-01-01T00:00:00.000Z')).toBe(
-      '2024-01-01 00:00:00',
-    );
+describe('iso8601ToDate()', () => {
+  test('function should return date string when iso-8601 datetime string is given', () => {
+    expect(utils.iso8601ToDate('2024-01-01')).toBe('2024-01-01');
   });
 
-  test('function should return datetime string when datetime object is given', () => {
-    expect(utils.iso8601ToDateTime(new Date('2024-01-01T00:00:00.000Z'))).toBe(
-      '2024-01-01 00:00:00',
+  test('function should return date string when datetime object is given', () => {
+    expect(utils.iso8601ToDate(new Date('2024-01-01T00:00:00.000Z'))).toBe(
+      '2024-01-01',
     );
   });
 });

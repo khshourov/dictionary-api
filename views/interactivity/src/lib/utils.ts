@@ -8,11 +8,11 @@ export class Utils {
     return pako.inflate(binaryData, { to: 'string' });
   }
 
-  iso8601ToDateTime(iso8601: string | Date) {
+  iso8601ToDate(iso8601: string | Date) {
     if (iso8601 instanceof Date) {
       iso8601 = iso8601.toISOString();
     }
     // iso 8601: YYYY-MM-DDThh:mm:ss.SSSZ
-    return iso8601.split('.')[0].replace('T', ' ');
+    return iso8601.split('T')[0];
   }
 }
